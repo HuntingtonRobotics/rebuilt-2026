@@ -45,8 +45,8 @@ public final class Constants {
       return layout.getTagPose(ID).get().toPose2d().getTranslation();
     }
 
-    public static Translation2d HubRed = (getTagPoseTranslation(9).plus(getTagPoseTranslation(10))).div(2);
-    public static Translation2d HubBlue = (getTagPoseTranslation(25).plus(getTagPoseTranslation(26))).div(2);
+    public static Translation2d HubRed = getTagPoseTranslation(10);
+    public static Translation2d HubBlue = getTagPoseTranslation(25);
 
     /**
      * Returns the length (X-axis) of the field in meters.
