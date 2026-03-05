@@ -56,8 +56,8 @@ public class FlywheelHood extends SubsystemBase {
         return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
-    public Command resetEncoder() {
-        return this.runOnce(() -> encoder.setPosition(0));
+    public void resetEncoder() {
+        encoder.setPosition(0);
     }
 
     public double getPosition() {
