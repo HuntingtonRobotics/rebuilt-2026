@@ -18,6 +18,7 @@ import frc.robot.subsystems.Intake.IntakeCollector;
 import frc.robot.subsystems.Intake.ExtendableHopper;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
+import frc.robot.subsystems.Shooter.FlywheelHood;
 import frc.robot.subsystems.Shooter.FlywheelShooter;
 
 /**
@@ -35,6 +36,7 @@ public class RobotContainer {
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
+  private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
   private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter);
@@ -103,5 +105,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  public void runRobotPeriodic() {
+    flywheelShooterHoodPeriodic();
+  }
+
+  private void flywheelShooterHoodPeriodic() {
+    SmartDashboard.putNumber("Hood Position", shooterHood.getPosition());
+    if (SmartDashboard.getBoolean(FlywheelHood.ResetEncoderDashboardKey, false)) {
+      SmartDashboard.putBoolean(FlywheelHood.ResetEncoderDashboardKey, false);
+      // Reset the encoder position to 0
+      shooterHood.resetEncoder();
+    }
   }
 }

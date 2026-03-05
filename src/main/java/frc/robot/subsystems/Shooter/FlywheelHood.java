@@ -1,24 +1,67 @@
 package frc.robot.subsystems.Shooter;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FlywheelHood extends SubsystemBase {
-    private final SparkMax motor = new SparkMax(2222, MotorType.kBrushless);
+    private static final String TargetPosDashboardKey = "Hood Target Position";
+    public static final String ResetEncoderDashboardKey = "Reset Encoder";
+    private SparkMax motor;
+    private SparkMaxConfig motorConfig;
+    private SparkClosedLoopController closedLoopController;
+    private RelativeEncoder encoder;
 
     public FlywheelHood() {
+        motor = new SparkMax(2222, MotorType.kBrushless);
+        closedLoopController = motor.getClosedLoopController();
+        encoder = motor.getEncoder();
+        motorConfig = new SparkMaxConfig();
+
+        motorConfig.encoder
+            .positionConversionFactor(1);
+        motorConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            // Set PID values for position control. We don't need to pass a closed loop
+            // slot, as it will default to slot 0.
+            .p(0.1)
+            .i(0)
+            .d(0)
+            .outputRange(-1, 1);
+        motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    
+        SmartDashboard.setDefaultNumber(TargetPosDashboardKey, 0);
+        SmartDashboard.setDefaultBoolean(ResetEncoderDashboardKey, false);
     }
 
-    public Command open() {
-        return Commands.race(this.run(() -> motor.set(0.15)), Commands.waitSeconds(2));
+    // These two methods are the same but with different Dashboard defaults
+    public Command high() {
+        double targetPosition = SmartDashboard.getNumber(TargetPosDashboardKey, 0);
+        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
-    public Command close() {
-        return Commands.race(this.run(() -> motor.set(-0.15)), Commands.waitSeconds(2));
+    public Command low() {
+        double targetPosition = SmartDashboard.getNumber(TargetPosDashboardKey, 0);
+        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+    }
+
+    public Command resetEncoder() {
+        return this.runOnce(() -> encoder.setPosition(0));
+    }
+
+    public double getPosition() {
+        return encoder.getPosition();
     }
     
 }
