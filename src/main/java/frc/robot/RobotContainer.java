@@ -15,6 +15,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Intake.IntakeCollector;
+import frc.robot.subsystems.Intake.IntakeDeploy;
 import frc.robot.subsystems.Intake.ExtendableHopper;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
@@ -31,6 +32,7 @@ public class RobotContainer {
 
   // Subsystems
   private final Swerve swerveDrivetrain = new Swerve();
+  private final IntakeDeploy intakeDeploy = new IntakeDeploy();
   private final IntakeCollector intakeCollector = new IntakeCollector();
   private final ExtendableHopper intakeHopper = new ExtendableHopper();
   private final Agitator agitator = new Agitator();
@@ -109,6 +111,7 @@ public class RobotContainer {
 
   public void runRobotPeriodic() {
     flywheelShooterHoodPeriodic();
+    intakeDeployPeriodic();
   }
 
   private void flywheelShooterHoodPeriodic() {
@@ -117,6 +120,15 @@ public class RobotContainer {
       SmartDashboard.putBoolean(FlywheelHood.ResetEncoderDashboardKey, false);
       // Reset the encoder position to 0
       shooterHood.resetEncoder();
+    }
+  }
+
+  private void intakeDeployPeriodic() {
+    SmartDashboard.putNumber("Intake Deploy Position", intakeDeploy.getPosition());
+    if (SmartDashboard.getBoolean(IntakeDeploy.ResetEncoderDashboardKey, false)) {
+      SmartDashboard.putBoolean(IntakeDeploy.ResetEncoderDashboardKey, false);
+      // Reset the encoder position to 0
+      intakeDeploy.resetEncoder();
     }
   }
 }
