@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -72,7 +74,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {}
-//bindings for controller
+
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -82,6 +84,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // Show in the dashboard whether robot is in range of the Hub
+    dashboardDisplayInRangeOfHub();
   }
 
   /** This function is called periodically during operator control. */
@@ -105,4 +110,28 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  
+  private void dashboardDisplayInRangeOfHub() {
+    double targetOffsetAngle_Vertical = LimelightHelpers.getTY("limelight");
+    double limelightMountAngleDegrees = 25.0; // TODO: measure this
+    double limelightLensHeightInches = 20.0; // TODO: measure this
+    double hubATHeightInches = getCurrentHub().getY();
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+    double distanceToGoalInches = (hubATHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+    boolean inRangeOfHub = distanceToGoalInches < 120; // TODO: tune this
+    // SmartDashboard.putBoolean("In Range of Hub", inRangeOfHub);
+  }
+
+  private Translation2d getCurrentHub() {
+    return DriverStation.getAlliance().isPresent()
+    ? (
+      DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+       ? Constants.FieldConstants.HubBlue
+       : Constants.FieldConstants.HubRed
+    )
+    : Constants.FieldConstants.HubBlue; // Default to blue hub if alliance is not present (e.g. in testing)
+  }
 }
