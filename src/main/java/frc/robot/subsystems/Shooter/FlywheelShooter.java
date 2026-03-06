@@ -42,6 +42,10 @@ public class FlywheelShooter extends SubsystemBase {
             new WaitForSpeedCommand(krakenMotor, RotationsPerSecond, 0.1)
         );
     }
+
+    public Command shoot(double speed) {
+        return this.runOnce(() -> krakenMotor.set(speed));
+    }
     
     public Command stop() {
         return this.runOnce(() -> krakenMotor.setControl(brake));

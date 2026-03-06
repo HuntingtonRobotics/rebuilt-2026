@@ -56,6 +56,19 @@ public class IntakeDeploy extends SubsystemBase {
         return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
+    public Command stop() {
+        return this.runOnce(() -> motor.set(0));
+    } 
+
+    /**
+     * Move the deploy motor up/down at a give speed. Automatically scaled down by 50%!
+     * @param speed
+     * @return
+     */
+    public Command move(double speed) {
+        return this.startEnd(() -> motor.set(speed * 0.5), () -> motor.set(0));
+    }
+
     public void resetEncoder() {
         encoder.setPosition(0);
     }
