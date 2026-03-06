@@ -3,7 +3,6 @@ package frc.robot.subsystems.Shooter;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Agitator extends SubsystemBase {
@@ -25,6 +24,6 @@ public class Agitator extends SubsystemBase {
   }
 
   public Command stop() {
-    return Commands.runOnce(() -> motorRight.set(0));
+    return this.runOnce(() -> motorRight.set(0));
   }
 }

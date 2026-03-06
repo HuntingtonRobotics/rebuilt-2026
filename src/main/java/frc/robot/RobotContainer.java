@@ -164,7 +164,7 @@ public class RobotContainer {
       .onTrue(shooterHood.low());
     
     // Agitator??
-    operatorController.x().onTrue(agitator.shakeIt());
+    operatorController.x().whileTrue(agitator.shakeIt());
 
     //  Combination (one-touch shoot and feed, stop on release)
     operatorController.rightBumper()
