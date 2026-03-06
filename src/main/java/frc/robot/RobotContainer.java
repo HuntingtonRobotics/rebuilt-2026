@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootUntilEmpty;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Intake.IntakeCollector;
 import frc.robot.subsystems.Intake.IntakeDeploy;
-import frc.robot.subsystems.Intake.ExtendableHopper;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
 import frc.robot.subsystems.Shooter.FlywheelHood;
@@ -33,9 +33,9 @@ public class RobotContainer {
 
   // Subsystems
   private final Swerve swerveDrivetrain = new Swerve();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeDeploy intakeDeploy = new IntakeDeploy();
   private final IntakeCollector intakeCollector = new IntakeCollector();
-  private final ExtendableHopper intakeHopper = new ExtendableHopper();
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
@@ -93,19 +93,22 @@ public class RobotContainer {
     /* Intake */
     //  Deploy
     operatorController.povUp()
-      .onTrue(intakeDeploy.up())
-      .onFalse(intakeDeploy.stop());
+      .onTrue(intakeSubsystem.deploy())
+      .onFalse(intakeSubsystem.stopDeploy());
     operatorController.povDown()
-      .onTrue(intakeDeploy.down())
-      .onFalse(intakeDeploy.stop());
+      .onTrue(intakeSubsystem.retract())
+      .onFalse(intakeSubsystem.stopDeploy());
     //  Deploy (fine control, fixed speed)
     operatorController.povUp().and(operatorController.a()
-      .onTrue(intakeDeploy.move(0.25)))
-      .onFalse(intakeDeploy.stop());
+      .onTrue(intakeSubsystem.runDeploy(0.25)))
+      .onFalse(intakeSubsystem.stopDeploy());
+    operatorController.povDown().and(operatorController.a()
+      .onTrue(intakeSubsystem.runDeploy(-0.25)))
+      .onFalse(intakeSubsystem.stopDeploy());
     //  Hopper
-    operatorController.start().onChange(intakeHopper.toggleExtend());
+    //TODO
     //  Collector (fine control, variable speed with L/R triggers)
-    intakeCollector.setDefaultCommand(
+    intakeSubsystem.setDefaultCommand(
       Commands.run(() -> {
           double forward = operatorController.getRightTriggerAxis(); // 0 → 1
           double reverse = operatorController.getLeftTriggerAxis();  // 0 → 1
@@ -114,15 +117,15 @@ public class RobotContainer {
           if (Math.abs(speed) < deadband) {
               speed = 0;
           }
-          intakeCollector.spin(speed);
+          intakeSubsystem.spin(speed);
         },
-        intakeCollector
+        intakeSubsystem
       )
     );
     // Collector (one-touch at pre-configured speed)
     operatorController.b()
-      .onTrue(intakeCollector.run())
-      .onFalse(intakeCollector.stop());
+      .onTrue(intakeSubsystem.run())
+      .onFalse(intakeSubsystem.stop());
 
     // Feeder (fine control, variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
@@ -194,11 +197,11 @@ public class RobotContainer {
   }
 
   private void intakeDeployPeriodic() {
-    SmartDashboard.putNumber("Intake Deploy Position", intakeDeploy.getPosition());
-    if (SmartDashboard.getBoolean(IntakeDeploy.ResetEncoderDashboardKey, false)) {
-      SmartDashboard.putBoolean(IntakeDeploy.ResetEncoderDashboardKey, false);
+    SmartDashboard.putNumber(IntakeSubsystem.IntakeDeployerCurrentPosDashboardKey, intakeSubsystem.getPosition());
+    if (SmartDashboard.getBoolean(IntakeSubsystem.ResetEncoderDashboardKey, false)) {
+      SmartDashboard.putBoolean(IntakeSubsystem.ResetEncoderDashboardKey, false);
       // Reset the encoder position to 0
-      intakeDeploy.resetEncoder();
+      intakeSubsystem.resetEncoder();
     }
   }
 }
