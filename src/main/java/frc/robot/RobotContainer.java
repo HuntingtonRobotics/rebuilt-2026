@@ -183,11 +183,17 @@ public class RobotContainer {
   }
 
   public void runRobotPeriodic() {
-    flywheelShooterHoodPeriodic();
-    intakeDeployPeriodic();
+    shooterPeriodic();
+    shooterHoodPeriodic();
+    intakeDeployerPeriodic();
+    feederPeriodic();
   }
 
-  private void flywheelShooterHoodPeriodic() {
+  private void shooterPeriodic() {
+    SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed().getValueAsDouble());
+  }
+
+  private void shooterHoodPeriodic() {
     SmartDashboard.putNumber("Hood Position", shooterHood.getPosition());
     if (SmartDashboard.getBoolean(FlywheelHood.ResetEncoderDashboardKey, false)) {
       SmartDashboard.putBoolean(FlywheelHood.ResetEncoderDashboardKey, false);
@@ -196,12 +202,16 @@ public class RobotContainer {
     }
   }
 
-  private void intakeDeployPeriodic() {
+  private void intakeDeployerPeriodic() {
     SmartDashboard.putNumber(IntakeSubsystem.IntakeDeployerCurrentPosDashboardKey, intakeSubsystem.getPosition());
     if (SmartDashboard.getBoolean(IntakeSubsystem.ResetEncoderDashboardKey, false)) {
       SmartDashboard.putBoolean(IntakeSubsystem.ResetEncoderDashboardKey, false);
       // Reset the encoder position to 0
       intakeSubsystem.resetEncoder();
     }
+  }
+  
+  private void feederPeriodic() {
+    SmartDashboard.putNumber("Feeder Speed", shooterFeeder.getSpeed());
   }
 }

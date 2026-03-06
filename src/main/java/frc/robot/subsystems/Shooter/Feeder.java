@@ -14,10 +14,14 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command feed(double speed) {
-      return this.runOnce(() -> feederMotor.set(speed));
+    return this.runOnce(() -> feederMotor.set(speed));
   }
 
   public Command stop() {
     return this.runOnce(() -> feederMotor.set(0));
+  }
+
+  public double getSpeed() {
+    return feederMotor.get();
   }
 }

@@ -1,10 +1,13 @@
 package frc.robot.subsystems.Shooter;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,6 +52,10 @@ public class FlywheelShooter extends SubsystemBase {
     
     public Command stop() {
         return this.runOnce(() -> krakenMotor.setControl(brake));
+    }
+
+    public StatusSignal<AngularVelocity> getSpeed() {
+        return krakenMotor.getVelocity();
     }
 
     private void applyConfig(TalonFXConfiguration config) {
