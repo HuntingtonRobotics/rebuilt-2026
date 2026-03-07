@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FlywheelHood extends SubsystemBase {
-    private static final String TargetPosDashboardKey = "Hood Target Position";
     public static final String ResetEncoderDashboardKey = "Reset Hood Position Encoder";
     private SparkMax motor;
     private SparkMaxConfig motorConfig;
@@ -38,22 +37,19 @@ public class FlywheelHood extends SubsystemBase {
             .p(0.1)
             .i(0)
             .d(0)
-            .outputRange(-1, 1);
+            .outputRange(-10, 20);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     
-        SmartDashboard.setDefaultNumber(TargetPosDashboardKey, 0);
         SmartDashboard.setDefaultBoolean(ResetEncoderDashboardKey, false);
     }
 
     // These two methods are the same but with different Dashboard defaults
     public Command high() {
-        double targetPosition = SmartDashboard.getNumber(TargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(9.8, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     public Command low() {
-        double targetPosition = SmartDashboard.getNumber(TargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(-0.1, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     public void resetEncoder() {
