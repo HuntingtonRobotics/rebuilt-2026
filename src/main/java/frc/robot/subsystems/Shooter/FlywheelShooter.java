@@ -21,7 +21,7 @@ import frc.robot.commands.WaitForSpeedCommand;
  */
 public class FlywheelShooter extends SubsystemBase {
 
-    private static final double RotationsPerSecond = 10;
+    private static final double RotationsPerSecond = 50;
     private final TalonFX krakenMotorLeft = new TalonFX(61);
     private final TalonFX krakenMotorRight = new TalonFX(60);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
@@ -51,7 +51,7 @@ public class FlywheelShooter extends SubsystemBase {
             // setControl only needs to be called once to keep velocity
             this.runOnce(() -> {
                 krakenMotorLeft.setControl(velocityVoltage.withVelocity(RotationsPerSecond));
-                krakenMotorRight.setControl(velocityVoltage.withVelocity(RotationsPerSecond));
+                krakenMotorRight.setControl(velocityVoltage.withVelocity(-RotationsPerSecond));
             }),
             new WaitForSpeedCommand(krakenMotorLeft, RotationsPerSecond, 0.1),
             new WaitForSpeedCommand(krakenMotorRight, RotationsPerSecond, 0.1)
