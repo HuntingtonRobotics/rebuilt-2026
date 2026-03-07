@@ -32,6 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkMax collectorMotor;
 
     // Deployer motor with closed-loop control
+    //  there are two physical motors on robot but only one needs to be configured here; the other is set to follow
     private SparkMax deployMotor;
     private SparkMaxConfig motorConfig;
     private SparkClosedLoopController closedLoopController;
@@ -53,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
             .p(0.1)
             .i(0)
             .d(0)
-            .outputRange(-1, 1);
+            .outputRange(-2, 50);
         deployMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         SmartDashboard.setDefaultNumber(IntakeDeployerTargetPosDashboardKey, 0);
@@ -88,21 +89,25 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public Command run() {
         return this.startEnd(
-          () -> collectorMotor.set(0.5),
+          () -> collectorMotor.set(-1),
           () -> collectorMotor.set(0)
         );
+    }
+
+    public Command moveToStart() {
+        return this.runOnce(() -> closedLoopController.setSetpoint(1.547, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     // ------------------- Deploy (rotate in/out) methods -------------------
     // These two methods are the same but with different Dashboard defaults
     public Command deploy() {
         double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition));
+        return this.runOnce(() -> closedLoopController.setSetpoint(16.50, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     public Command retract() {
         double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     
     public Command stopDeploy() {
@@ -110,10 +115,10 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /**
-     * Deploy or retract at a given speed. Automatically scaled down by 50%!
+     * Deploy or retract at a given speed
      */
     public Command runDeploy(double speed) {
-        return this.startEnd(() -> deployMotor.set(speed * 0.5), () -> deployMotor.set(0));
+        return this.runOnce(() -> deployMotor.set(speed));
     }
 
     public void resetEncoder() {

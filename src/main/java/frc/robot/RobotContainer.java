@@ -124,8 +124,8 @@ public class RobotContainer {
     );
     // Collector (one-touch at pre-configured speed)
     operatorController.b()
-      .onTrue(intakeSubsystem.run())
-      .onFalse(intakeSubsystem.stop());
+      .onTrue(shooter.shoot())
+      .onFalse(shooter.stop());
 
     // Feeder (fine control, variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
@@ -164,13 +164,29 @@ public class RobotContainer {
       .onTrue(shooterHood.low());
     
     // Agitator??
-    operatorController.x().whileTrue(agitator.shakeIt());
+    //operatorController.x().whileTrue(agitator.shakeIt());
+    operatorController.x()
+    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
+    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
+    intakeSubsystem.setDefaultCommand(
+      Commands.runOnce(() -> intakeSubsystem.moveToStart(), intakeSubsystem)
+    );
     //  Combination (one-touch shoot and feed, stop on release)
     operatorController.rightBumper()
-        .onTrue(shooter.shoot().andThen(shooterFeeder.feed()))
-        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
-
+        //.onTrue(shooter.shoot())//.andThen(shooterFeeder.feed()))
+        //.onFalse(shooter.stop());//.alongWith(shooterFeeder.stop()));
+        //.onTrue(shooterFeeder.feed())
+        //.onFalse(shooterFeeder.stop());
+        .onTrue(shooterHood.high());
+        //.onTrue(intakeSubsystem.deploy());
+        //.onTrue(intakeSubsystem.runDeploy(5))
+        //.onFalse(intakeSubsystem.stopDeploy());
+    operatorController.leftBumper().onTrue(shooterHood.low());
+        //operatorController.leftBumper()
+        //.onTrue(intakeSubsystem.moveToStart());
+        //.onTrue(intakeSubsystem.runDeploy(-5))
+        //.onFalse(intakeSubsystem.stopDeploy());
   }
 
   /**
