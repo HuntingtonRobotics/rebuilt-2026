@@ -9,8 +9,10 @@ public class Feeder extends SubsystemBase {
 
   private final SparkMax feederMotor = new SparkMax(54, MotorType.kBrushless);
 
+  // Positive = feed into shooter
+  // Negative = outtake away from shooter (into hopper)
   public Command feed() {
-    return this.runOnce(() -> feederMotor.set(-0.5));
+    return this.runOnce(() -> feederMotor.set(0.75));
   }
 
   public Command feed(double speed) {
