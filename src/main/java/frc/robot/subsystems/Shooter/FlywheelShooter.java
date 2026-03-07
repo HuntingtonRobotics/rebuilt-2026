@@ -13,10 +13,17 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.WaitForSpeedCommand;
 
+/** Subsystem for the flywheel shooter.
+ * 
+ * <p>
+ * The shooter consists of two independent motors spinning separate flywheels.
+ * </p>
+ */
 public class FlywheelShooter extends SubsystemBase {
 
     private static final double RotationsPerSecond = 41.7;
-    private final TalonFX krakenMotor = new TalonFX(1);
+    private final TalonFX krakenMotorLeft = new TalonFX(1);
+    private final TalonFX krakenMotorRight = new TalonFX(2);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
 
@@ -35,33 +42,48 @@ public class FlywheelShooter extends SubsystemBase {
             .withPeakReverseVoltage(-8.0);
 
         /* Retry config apply up to 5 times, report if failure */
-        applyConfig(config);
+        applyConfig(krakenMotorLeft, config);
+        applyConfig(krakenMotorRight, config);
     }
 
     public Command shoot() {
         return new ParallelCommandGroup(
             // setControl only needs to be called once to keep velocity
-            this.runOnce(() -> krakenMotor.setControl(velocityVoltage.withVelocity(RotationsPerSecond))),
-            new WaitForSpeedCommand(krakenMotor, RotationsPerSecond, 0.1)
+            this.runOnce(() -> {
+                krakenMotorLeft.setControl(velocityVoltage.withVelocity(RotationsPerSecond));
+                krakenMotorRight.setControl(velocityVoltage.withVelocity(RotationsPerSecond));
+            }),
+            new WaitForSpeedCommand(krakenMotorLeft, RotationsPerSecond, 0.1),
+            new WaitForSpeedCommand(krakenMotorRight, RotationsPerSecond, 0.1)
         );
     }
 
     public Command shoot(double speed) {
-        return this.runOnce(() -> krakenMotor.set(speed));
+        return this.runOnce(() -> {
+            krakenMotorLeft.set(speed);
+            krakenMotorRight.set(speed);
+        });
     }
     
     public Command stop() {
-        return this.runOnce(() -> krakenMotor.setControl(brake));
+        return this.runOnce(() -> {
+            krakenMotorLeft.setControl(brake);
+            krakenMotorRight.setControl(brake);
+        });
     }
 
-    public StatusSignal<AngularVelocity> getSpeed() {
-        return krakenMotor.getVelocity();
+    public StatusSignal<AngularVelocity> getSpeedLeft() {
+        return krakenMotorLeft.getVelocity();
     }
 
-    private void applyConfig(TalonFXConfiguration config) {
+    public StatusSignal<AngularVelocity> getSpeedRight() {
+        return krakenMotorRight.getVelocity();
+    }
+
+    private void applyConfig(TalonFX motor, TalonFXConfiguration config) {
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
-          status = krakenMotor.getConfigurator().apply(config);
+          status = motor.getConfigurator().apply(config);
           if (status.isOK()) break;
         }
         if (!status.isOK()) {

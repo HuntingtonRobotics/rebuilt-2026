@@ -190,7 +190,8 @@ public class RobotContainer {
   }
 
   private void shooterPeriodic() {
-    SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed().getValueAsDouble());
+    SmartDashboard.putNumber("Left Shooter Speed", shooter.getSpeedLeft().getValueAsDouble());
+    SmartDashboard.putNumber("Right Shooter Speed", shooter.getSpeedRight().getValueAsDouble());
   }
 
   private void shooterHoodPeriodic() {
