@@ -122,25 +122,25 @@ public class Telemetry {
         
         // For SwerveDrive dashboard widget (Elastic)
         //  Not sure if this is needed; all the info is above but might need to be in a specific format for the widget to work
-        SmartDashboard.putData("Swerve Drive", new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("SwerveDrive");
+        // SmartDashboard.putData("Swerve Drive", new Sendable() {
+        // @Override
+        // public void initSendable(SendableBuilder builder) {
+        //     builder.setSmartDashboardType("SwerveDrive");
 
-            builder.addDoubleProperty("Front Left Angle", () -> state.ModuleStates[0].angle.getRadians(), null);
-            builder.addDoubleProperty("Front Left Velocity", () -> state.ModuleStates[0].speedMetersPerSecond, null);
+        //     builder.addDoubleProperty("Front Left Angle", () -> state.ModuleStates[0].angle.getRadians(), null);
+        //     builder.addDoubleProperty("Front Left Velocity", () -> state.ModuleStates[0].speedMetersPerSecond, null);
 
-            builder.addDoubleProperty("Front Right Angle", () -> state.ModuleStates[1].angle.getRadians(), null);
-            builder.addDoubleProperty("Front Right Velocity", () -> state.ModuleStates[1].speedMetersPerSecond, null);
+        //     builder.addDoubleProperty("Front Right Angle", () -> state.ModuleStates[1].angle.getRadians(), null);
+        //     builder.addDoubleProperty("Front Right Velocity", () -> state.ModuleStates[1].speedMetersPerSecond, null);
 
-            builder.addDoubleProperty("Back Left Angle", () -> state.ModuleStates[2].angle.getRadians(), null);
-            builder.addDoubleProperty("Back Left Velocity", () -> state.ModuleStates[2].speedMetersPerSecond, null);
+        //     builder.addDoubleProperty("Back Left Angle", () -> state.ModuleStates[2].angle.getRadians(), null);
+        //     builder.addDoubleProperty("Back Left Velocity", () -> state.ModuleStates[2].speedMetersPerSecond, null);
 
-            builder.addDoubleProperty("Back Right Angle", () -> state.ModuleStates[3].angle.getRadians(), null);
-            builder.addDoubleProperty("Back Right Velocity", () -> state.ModuleStates[3].speedMetersPerSecond, null);
+        //     builder.addDoubleProperty("Back Right Angle", () -> state.ModuleStates[3].angle.getRadians(), null);
+        //     builder.addDoubleProperty("Back Right Velocity", () -> state.ModuleStates[3].speedMetersPerSecond, null);
 
-            builder.addDoubleProperty("Robot Angle", () -> state.Pose.getRotation().getRadians(), null);
-        }
-        });
+        //     builder.addDoubleProperty("Robot Angle", () -> state.Pose.getRotation().getRadians(), null);
+        // }
+        // });
     }
 }
