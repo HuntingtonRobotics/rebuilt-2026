@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/** The agitator moves Fuel Cells toward the Feeder. */
 public class Agitator extends SubsystemBase {
 
   // *** CHANGE IDs ***
@@ -25,5 +26,9 @@ public class Agitator extends SubsystemBase {
 
   public Command stop() {
     return this.runOnce(() -> motorRight.set(0));
+  }
+
+  public double getSpeed() {
+    return motorRight.get();
   }
 }

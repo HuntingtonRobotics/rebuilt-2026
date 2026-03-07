@@ -187,6 +187,7 @@ public class RobotContainer {
     shooterHoodPeriodic();
     intakeDeployerPeriodic();
     feederPeriodic();
+    agitatorPeriodic();
   }
 
   private void shooterPeriodic() {
@@ -214,5 +215,9 @@ public class RobotContainer {
   
   private void feederPeriodic() {
     SmartDashboard.putNumber("Feeder Speed", shooterFeeder.getSpeed());
+  }
+
+  private void agitatorPeriodic() {
+    SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
   }
 }
