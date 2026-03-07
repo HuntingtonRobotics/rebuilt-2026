@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FlywheelHood extends SubsystemBase {
     private static final String TargetPosDashboardKey = "Hood Target Position";
-    public static final String ResetEncoderDashboardKey = "Reset Encoder";
+    public static final String ResetEncoderDashboardKey = "Reset Hood Position Encoder";
     private SparkMax motor;
     private SparkMaxConfig motorConfig;
     private SparkClosedLoopController closedLoopController;
