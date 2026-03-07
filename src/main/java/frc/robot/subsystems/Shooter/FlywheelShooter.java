@@ -21,7 +21,7 @@ import frc.robot.commands.WaitForSpeedCommand;
  */
 public class FlywheelShooter extends SubsystemBase {
 
-    private static final double RotationsPerSecond = 41.7;
+    private static final double RotationsPerSecond = 10;
     private final TalonFX krakenMotorLeft = new TalonFX(61);
     private final TalonFX krakenMotorRight = new TalonFX(60);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
@@ -38,8 +38,8 @@ public class FlywheelShooter extends SubsystemBase {
         config.Slot0.kD = 0.000025; // No output for error derivative
     
         // Peak output of 8 volts
-        config.Voltage.withPeakForwardVoltage(8.0)
-            .withPeakReverseVoltage(-8.0);
+        config.Voltage.withPeakForwardVoltage(50.0)
+            .withPeakReverseVoltage(-50.0);
 
         /* Retry config apply up to 5 times, report if failure */
         applyConfig(krakenMotorLeft, config);
@@ -60,8 +60,8 @@ public class FlywheelShooter extends SubsystemBase {
 
     public Command shoot(double speed) {
         return this.runOnce(() -> {
-            krakenMotorLeft.set(speed);
-            krakenMotorRight.set(speed);
+            krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
+            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * 50));
         });
     }
     
