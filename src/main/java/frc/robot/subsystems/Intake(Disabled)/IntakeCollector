@@ -1,4 +1,3 @@
-package frc.robot.subsystems.Intake;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;

@@ -24,7 +24,7 @@ public class FlywheelHood extends SubsystemBase {
     private RelativeEncoder encoder;
 
     public FlywheelHood() {
-        motor = new SparkMax(2222, MotorType.kBrushless);
+        motor = new SparkMax(53, MotorType.kBrushless);
         closedLoopController = motor.getClosedLoopController();
         encoder = motor.getEncoder();
         motorConfig = new SparkMaxConfig();

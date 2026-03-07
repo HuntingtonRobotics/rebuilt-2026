@@ -16,8 +16,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Intake.IntakeCollector;
-import frc.robot.subsystems.Intake.IntakeDeploy;
+//import frc.robot.subsystems.Intake.IntakeCollector;
+//import frc.robot.subsystems.Intake.IntakeDeploy;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
 import frc.robot.subsystems.Shooter.FlywheelHood;
@@ -34,8 +34,8 @@ public class RobotContainer {
   // Subsystems
   private final Swerve swerveDrivetrain = new Swerve();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final IntakeDeploy intakeDeploy = new IntakeDeploy();
-  private final IntakeCollector intakeCollector = new IntakeCollector();
+  //private final IntakeDeploy intakeDeploy = new IntakeDeploy();
+  //private final IntakeCollector intakeCollector = new IntakeCollector();
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
@@ -50,7 +50,7 @@ public class RobotContainer {
     new CommandXboxController(OperatorConstants.OperatorControllerPort);
 
   /* Path follower */
-  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,7 +58,7 @@ public class RobotContainer {
   public RobotContainer() {
     registerDashboardProperties();
     registerNamedCommands();
-    autoChooser = AutoBuilder.buildAutoChooser("shootUntilEmpty");
+    //autoChooser = AutoBuilder.buildAutoChooser("shootUntilEmpty");
 
     configureBindings();
 
@@ -179,7 +179,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    //return autoChooser.getSelected();
+    return Commands.none();
   }
 
   public void runRobotPeriodic() {

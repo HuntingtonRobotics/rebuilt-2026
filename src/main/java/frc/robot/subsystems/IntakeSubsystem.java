@@ -38,8 +38,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private RelativeEncoder encoder;
 
     public IntakeSubsystem() {
-        collectorMotor = new SparkMax(9, MotorType.kBrushless);
-        deployMotor = new SparkMax(1, MotorType.kBrushless);
+        collectorMotor = new SparkMax(51, MotorType.kBrushless);
+        deployMotor = new SparkMax(56, MotorType.kBrushless);
         closedLoopController = deployMotor.getClosedLoopController();
         encoder = deployMotor.getEncoder();
         motorConfig = new SparkMaxConfig();

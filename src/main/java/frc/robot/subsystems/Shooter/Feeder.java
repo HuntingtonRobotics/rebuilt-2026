@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder extends SubsystemBase {
 
-  private final SparkMax feederMotor = new SparkMax(8, MotorType.kBrushless);
+  private final SparkMax feederMotor = new SparkMax(54, MotorType.kBrushless);
 
   public Command feed() {
     return this.runOnce(() -> feederMotor.set(-0.5));

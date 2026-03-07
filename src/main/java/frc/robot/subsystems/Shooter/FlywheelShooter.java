@@ -22,8 +22,8 @@ import frc.robot.commands.WaitForSpeedCommand;
 public class FlywheelShooter extends SubsystemBase {
 
     private static final double RotationsPerSecond = 41.7;
-    private final TalonFX krakenMotorLeft = new TalonFX(1);
-    private final TalonFX krakenMotorRight = new TalonFX(2);
+    private final TalonFX krakenMotorLeft = new TalonFX(61);
+    private final TalonFX krakenMotorRight = new TalonFX(60);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
 
