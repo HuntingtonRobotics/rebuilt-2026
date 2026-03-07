@@ -24,6 +24,10 @@ public class Agitator extends SubsystemBase {
     );
   }
 
+  public Command agitate() {
+    return this.runOnce(() -> motorRight.set(0.5));
+  }
+
   public Command stop() {
     return this.runOnce(() -> motorRight.set(0));
   }
