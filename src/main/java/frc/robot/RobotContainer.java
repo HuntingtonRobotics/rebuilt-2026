@@ -90,24 +90,15 @@ public class RobotContainer {
 
   private void configureGameplayBindings() {
     //TODO - refactor into methods
-    /* Intake */
-    //  Deploy
+    //  Deploy/Retract Intake
     operatorController.povUp()
       .onTrue(intakeSubsystem.deploy())
       .onFalse(intakeSubsystem.stopDeploy());
     operatorController.povDown()
       .onTrue(intakeSubsystem.retract())
       .onFalse(intakeSubsystem.stopDeploy());
-    //  Deploy (fine control, fixed speed)
-    operatorController.povUp().and(operatorController.a()
-      .onTrue(intakeSubsystem.runDeploy(0.25)))
-      .onFalse(intakeSubsystem.stopDeploy());
-    operatorController.povDown().and(operatorController.a()
-      .onTrue(intakeSubsystem.runDeploy(-0.25)))
-      .onFalse(intakeSubsystem.stopDeploy());
-    //  Hopper
-    //TODO
-    //  Collector (fine control, variable speed with L/R triggers)
+    
+    //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
       Commands.run(() -> {
           double forward = operatorController.getRightTriggerAxis(); // 0 → 1
@@ -122,12 +113,13 @@ public class RobotContainer {
         intakeSubsystem
       )
     );
-    // Collector (one-touch at pre-configured speed)
+
+    // Shooter (one-touch at pre-configured speed)
     operatorController.b()
       .onTrue(shooter.shoot())
       .onFalse(shooter.stop());
-
-    // Feeder (fine control, variable speed with Left Stick Y-Axis)
+    
+    // Feeder (variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
       Commands.run(() -> {
         double speed = -operatorController.getLeftY();
@@ -138,12 +130,8 @@ public class RobotContainer {
         shooterFeeder.feed(speed);
       }, shooterFeeder)
     );
-    // Feeder (one-touch at pre-configured speed)
-    operatorController.y()
-      .onTrue(shooterFeeder.feed())
-      .onFalse(shooterFeeder.stop());
 
-    // Shooter (fine control, variable speed with Right Stick Y-Axis)
+    // Shooter (variable speed with Right Stick Y-Axis)
     shooter.setDefaultCommand(
       Commands.run(() -> {
           double speed = -operatorController.getRightY();
@@ -158,35 +146,16 @@ public class RobotContainer {
     );
 
     // Shooter Hood (one-touch to preset positions)
-    operatorController.povRight()
+    operatorController.rightBumper()
       .onTrue(shooterHood.high());
-    operatorController.povLeft()
+    operatorController.leftBumper()
       .onTrue(shooterHood.low());
     
-    // Agitator??
-    //operatorController.x().whileTrue(agitator.shakeIt());
+    // Feeder+Agitator+Intake
     operatorController.x()
     .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
     .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
-    intakeSubsystem.setDefaultCommand(
-      Commands.runOnce(() -> intakeSubsystem.moveToStart(), intakeSubsystem)
-    );
-    //  Combination (one-touch shoot and feed, stop on release)
-    operatorController.rightBumper()
-        //.onTrue(shooter.shoot())//.andThen(shooterFeeder.feed()))
-        //.onFalse(shooter.stop());//.alongWith(shooterFeeder.stop()));
-        //.onTrue(shooterFeeder.feed())
-        //.onFalse(shooterFeeder.stop());
-        .onTrue(shooterHood.high());
-        //.onTrue(intakeSubsystem.deploy());
-        //.onTrue(intakeSubsystem.runDeploy(5))
-        //.onFalse(intakeSubsystem.stopDeploy());
-    operatorController.leftBumper().onTrue(shooterHood.low());
-        //operatorController.leftBumper()
-        //.onTrue(intakeSubsystem.moveToStart());
-        //.onTrue(intakeSubsystem.runDeploy(-5))
-        //.onFalse(intakeSubsystem.stopDeploy());
   }
 
   /**
