@@ -4,6 +4,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
 import frc.robot.subsystems.Shooter.FlywheelShooter;
@@ -13,11 +14,13 @@ public class ShootUntilEmpty extends Command {
   private final Agitator agitator;
   private final Feeder feeder;
   private final FlywheelShooter shooter;
+  private final IntakeSubsystem intake;
 
-  public ShootUntilEmpty(Agitator agitator, Feeder feeder, FlywheelShooter shooter) {
+  public ShootUntilEmpty(Agitator agitator, Feeder feeder, FlywheelShooter shooter, IntakeSubsystem intake) {
     this.agitator = agitator;
     this.feeder = feeder;
     this.shooter = shooter;
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(agitator, feeder, shooter);
   }
@@ -32,6 +35,13 @@ public class ShootUntilEmpty extends Command {
       ),
       agitator.shakeIt()
     );
+    try {
+      wait(200);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
