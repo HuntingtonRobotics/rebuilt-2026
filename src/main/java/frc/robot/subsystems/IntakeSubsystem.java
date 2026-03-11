@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** Subsystem for the intake device.
  * 
@@ -56,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
             .p(0.01)
             .i(0)
             .d(0)
-            .outputRange(-2, 50);
+            .outputRange(-.1, 1);
         deployMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         SmartDashboard.setDefaultNumber(IntakeDeployerTargetPosDashboardKey, 0);
@@ -89,7 +90,8 @@ public class IntakeSubsystem extends SubsystemBase {
      *
      * @return A command that starts the collector and stops it when finished.
      */
-    public Command run() {
+    
+     public Command run() {
         return this.startEnd(
           () -> collectorMotor.set(-1),
           () -> collectorMotor.set(0)
@@ -117,10 +119,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command flexIntake() {
-        if(encoder.getPosition() > 4){
-            return Commands.sequence(retract(), deploy());
+        if(encoder.getPosition() > 6){
+            return Commands.sequence(retract(),new WaitCommand(7),
+ deploy());
         }
-        return Commands.sequence(deploy(), retract());
+        return Commands.sequence(deploy(),new WaitCommand(7),
+ retract());
     }
 
     /**

@@ -12,7 +12,7 @@ public class Feeder extends SubsystemBase {
   // Positive = feed into shooter
   // Negative = outtake away from shooter (into hopper)
   public Command feed() {
-    return this.runOnce(() -> feederMotor.set(0.75));
+    return this.runOnce(() -> feederMotor.set(1.0));
   }
 
   public Command feed(double speed) {

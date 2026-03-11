@@ -42,7 +42,7 @@ public class RobotContainer {
   private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
-  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter);
+  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
 
   private final CommandXboxController driverController =
     new CommandXboxController(OperatorConstants.DriverControllerPort);
@@ -153,10 +153,12 @@ public class RobotContainer {
     
     // Feeder+Agitator+Intake
     operatorController.x()
-    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
-    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
-
-  }
+    //.onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
+    //.onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+    .onTrue(intakeSubsystem.flexIntake().alongWith(agitator.agitate()).alongWith(shooterFeeder.feed()))
+    .onFalse(intakeSubsystem.stopDeploy().alongWith(agitator.stop()).alongWith(shooterFeeder.stop()));
+      }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
