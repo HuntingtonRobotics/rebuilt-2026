@@ -86,8 +86,8 @@ public class Swerve {
     }
 
     private void fineMotorControlBindings(CommandXboxController controller) {
-        double speedX = 0.5;
-        double speedY = 0.5;
+        double speedX = 0.15 * Constants.SwerveConstants.MaxSpeed;
+        double speedY = 0.15 * Constants.SwerveConstants.MaxSpeed;
 
         // Forward
         controller.povUp().whileTrue(
