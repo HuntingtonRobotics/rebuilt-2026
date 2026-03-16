@@ -91,12 +91,11 @@ public class RobotContainer {
   private void configureGameplayBindings() {
     //TODO - refactor into methods
     //  Deploy/Retract Intake
-    operatorController.povUp()
-      .onTrue(intakeSubsystem.deploy())
-      .onFalse(intakeSubsystem.stopDeploy());
+   // operatorController.povUp()
     operatorController.povDown()
-      .onTrue(intakeSubsystem.retract())
-      .onFalse(intakeSubsystem.stopDeploy());
+      .onTrue(shooterHood.high())
+      .onFalse(shooterHood.low());
+      
     
     //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
@@ -115,9 +114,9 @@ public class RobotContainer {
     );
 
     // Shooter (one-touch at pre-configured speed)
-    operatorController.b()
-      .onTrue(shooter.shoot())
-      .onFalse(shooter.stop());
+    operatorController.y()
+      .onTrue(intakeSubsystem.deploy())
+      .onFalse(intakeSubsystem.stop());
     
     // Feeder (variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
@@ -146,18 +145,20 @@ public class RobotContainer {
     );
 
     // Shooter Hood (one-touch to preset positions)
-    operatorController.rightBumper()
-      .onTrue(shooterHood.high());
     operatorController.leftBumper()
-      .onTrue(shooterHood.low());
+         .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
+         .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+
+    //.onTrue(shooterHood.high());
+    operatorController.rightBumper()
+      .onTrue(shooter.shoot())
+      .onFalse(shooter.stop());
     
     // Feeder+Agitator+Intake
-    driverController.x()
-    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
-    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
-   // .onTrue(intakeSubsystem.flexIntake().alongWith(agitator.agitate()).alongWith(shooterFeeder.feed()))
-    //.onFalse(intakeSubsystem.stopDeploy().alongWith(agitator.stop()).alongWith(shooterFeeder.stop()));
-      }
+    operatorController.a()
+          .onTrue(intakeSubsystem.retract())
+          .onFalse(intakeSubsystem.stop());
+        }
   
 
   /**
