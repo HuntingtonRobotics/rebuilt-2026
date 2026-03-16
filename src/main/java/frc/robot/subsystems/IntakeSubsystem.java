@@ -54,10 +54,10 @@ public class IntakeSubsystem extends SubsystemBase {
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             // Set PID values for position control. We don't need to pass a closed loop
             // slot, as it will default to slot 0.
-            .p(0.01)
+            .p(0.1)
             .i(0)
             .d(0)
-            .outputRange(-.1, 1);
+            .outputRange(-1, 1);
         deployMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         SmartDashboard.setDefaultNumber(IntakeDeployerTargetPosDashboardKey, 0);
@@ -105,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // These two methods are the same but with different Dashboard defaults
     public Command deploy() {
         double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(16.50, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(-16.50, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     public Command retract() {
