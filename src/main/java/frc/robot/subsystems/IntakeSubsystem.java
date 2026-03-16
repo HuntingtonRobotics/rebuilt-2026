@@ -75,7 +75,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command spin(double speed) {
         return this.runOnce(() -> collectorMotor.set(speed));
     }
-
     /**
      * Stop the collector motor.
      *
@@ -118,14 +117,14 @@ public class IntakeSubsystem extends SubsystemBase {
         return this.runOnce(() -> deployMotor.set(0));
     }
 
-    public Command flexIntake() {
-        if(encoder.getPosition() > 6){
-            return Commands.sequence(retract(),new WaitCommand(7),
- deploy());
-        }
-        return Commands.sequence(deploy(),new WaitCommand(7),
- retract());
-    }
+   // public Command flexIntake() {
+     //   if(encoder.getPosition() > 6){
+       //     return Commands.sequence(retract(),new WaitCommand(7),
+ //deploy());
+   //     }
+     //   return Commands.sequence(deploy(),new WaitCommand(7),
+ //retract());
+  //  }
 
     /**
      * Deploy or retract at a given speed

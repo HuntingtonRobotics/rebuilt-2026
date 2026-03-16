@@ -152,11 +152,11 @@ public class RobotContainer {
       .onTrue(shooterHood.low());
     
     // Feeder+Agitator+Intake
-    operatorController.x()
-    //.onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
-    //.onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
-    .onTrue(intakeSubsystem.flexIntake().alongWith(agitator.agitate()).alongWith(shooterFeeder.feed()))
-    .onFalse(intakeSubsystem.stopDeploy().alongWith(agitator.stop()).alongWith(shooterFeeder.stop()));
+    driverController.x()
+    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
+    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+   // .onTrue(intakeSubsystem.flexIntake().alongWith(agitator.agitate()).alongWith(shooterFeeder.feed()))
+    //.onFalse(intakeSubsystem.stopDeploy().alongWith(agitator.stop()).alongWith(shooterFeeder.stop()));
       }
   
 
