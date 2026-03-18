@@ -113,10 +113,7 @@ public class RobotContainer {
       )
     );
 
-    // Shooter (one-touch at pre-configured speed)
-    operatorController.y()
-      .onTrue(intakeSubsystem.deploy())
-      .onFalse(intakeSubsystem.stopDeploy());
+    
     
     // Feeder (variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
@@ -154,11 +151,15 @@ public class RobotContainer {
       .onTrue(shooter.shoot())
       .onFalse(shooter.stop());
     
-    // Feeder+Agitator+Intake
-    operatorController.a()
+    // Intake deploy/retract
+    operatorController.y()
           .onTrue(intakeSubsystem.retract())
           .onFalse(intakeSubsystem.stopDeploy());
-        }
+          
+    operatorController.a()
+          .onTrue(intakeSubsystem.deploy())
+          .onFalse(intakeSubsystem.stopDeploy());
+      }
   
 
   /**
