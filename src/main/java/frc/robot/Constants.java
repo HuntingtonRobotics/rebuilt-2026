@@ -27,7 +27,8 @@ public final class Constants {
   }
 
   public static class DashboardConstants {
-    public static String VisionOdoEnabledKey = "visionOdoEnabled";
+    public static final String AutoModeKey = "Auto Mode";
+    public static final String VisionOdoEnabledKey = "visionOdoEnabled";
   }
 
   public static class SwerveConstants {

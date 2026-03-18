@@ -4,15 +4,19 @@
 
 package frc.robot;
 
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -42,7 +46,7 @@ public class RobotContainer {
   private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
-  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
+  //private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
 
   private final CommandXboxController driverController =
     new CommandXboxController(OperatorConstants.DriverControllerPort);
@@ -58,8 +62,9 @@ public class RobotContainer {
   public RobotContainer() {
     registerDashboardProperties();
     registerNamedCommands();
-    //autoChooser = AutoBuilder.buildAutoChooser("shootUntilEmpty");
-
+    //autoChooser = AutoBuilder.buildAutoChooser("Agro otherside pickup");
+    //SmartDashboard.putData(DashboardConstants.AutoModeKey, autoChooser);
+    
     configureBindings();
 
     // Add camera feed to dashboard
@@ -67,9 +72,12 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shootUntilEmpty", shootUntilEmpty);
+    NamedCommands.registerCommand("shootUntilEmpty", Autos.shootUntilEmpty(shooter));
+    // Add more commands here as needed
   }
-
+  
+  
+  
   private void registerDashboardProperties() {
     SmartDashboard.putBoolean(Constants.DashboardConstants.VisionOdoEnabledKey, true);
   }
@@ -96,7 +104,6 @@ public class RobotContainer {
       .onTrue(shooterHood.high())
       .onFalse(shooterHood.low());
       
-    
     //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
       Commands.run(() -> {
@@ -150,12 +157,12 @@ public class RobotContainer {
       .onFalse(shooter.stop());
     
     // Intake deploy/retract
-    operatorController.y()
-          .onTrue(intakeSubsystem.retract())
+    operatorController.y() // retract
+          .onTrue(intakeSubsystem.runDeploy(-0.15))
           .onFalse(intakeSubsystem.stopDeploy());
 
-    operatorController.a()
-      .onTrue(intakeSubsystem.deploy())
+    operatorController.a() // deploy
+      .onTrue(intakeSubsystem.runDeploy(0.15))
       .onFalse(intakeSubsystem.stopDeploy());
     }
   
