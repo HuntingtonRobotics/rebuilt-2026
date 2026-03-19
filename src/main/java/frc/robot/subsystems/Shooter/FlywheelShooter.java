@@ -20,8 +20,8 @@ import frc.robot.commands.WaitForSpeedCommand;
  * </p>
  */
 public class FlywheelShooter extends SubsystemBase {
-
-    private static final double RotationsPerSecond = 56.66;
+    private static final double rpm = 2500;
+    private static final double RotationsPerSecond = rpm/60;
     private final TalonFX krakenMotorLeft = new TalonFX(61);
     private final TalonFX krakenMotorRight = new TalonFX(60);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
@@ -61,7 +61,7 @@ public class FlywheelShooter extends SubsystemBase {
     public Command shoot(double speed) {
         return this.runOnce(() -> {
             krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
-            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * 50));
+            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50));
         });
     }
     
