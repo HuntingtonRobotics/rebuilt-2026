@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "deployIntake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -18,12 +30,6 @@
                 "type": "named",
                 "data": {
                   "name": "feed"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
                 }
               }
             ]
