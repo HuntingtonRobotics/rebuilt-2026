@@ -4,19 +4,15 @@
 
 package frc.robot;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -46,9 +42,9 @@ public class RobotContainer {
   private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
-  //private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
-
+  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
   private final CommandXboxController driverController =
+  
     new CommandXboxController(OperatorConstants.DriverControllerPort);
   private final CommandXboxController operatorController =
     new CommandXboxController(OperatorConstants.OperatorControllerPort);
@@ -59,25 +55,28 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+  private final SendableChooser<Command> autoChooser;
   public RobotContainer() {
     registerDashboardProperties();
+
     registerNamedCommands();
-    //autoChooser = AutoBuilder.buildAutoChooser("Agro otherside pickup");
-    //SmartDashboard.putData(DashboardConstants.AutoModeKey, autoChooser);
+    
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Mode", autoChooser);
     
     configureBindings();
-
     // Add camera feed to dashboard
     CameraServer.startAutomaticCapture();
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shootUntilEmpty", Autos.shootUntilEmpty(shooter));
-    // Add more commands here as needed
+    NamedCommands.registerCommand("shoot", shooter.shoot());
+    NamedCommands.registerCommand("shootStop", shooter.stop());
+    NamedCommands.registerCommand("stopIntake", intakeSubsystem.stopDeploy());
+    NamedCommands.registerCommand("runIntake", intakeSubsystem.runDeploy(1.0));
+    NamedCommands.registerCommand("retractIntake", intakeSubsystem.retract());
   }
-  
-  
-  
+
   private void registerDashboardProperties() {
     SmartDashboard.putBoolean(Constants.DashboardConstants.VisionOdoEnabledKey, true);
   }
@@ -99,11 +98,13 @@ public class RobotContainer {
   private void configureGameplayBindings() {
     //TODO - refactor into methods
     //  Deploy/Retract Intake
-   // operatorController.povUp()
+    operatorController.povUp()
+      .onTrue(intakeSubsystem.runDeploy(1))
+      .onFalse(intakeSubsystem.stopDeploy());
     operatorController.povDown()
-      .onTrue(shooterHood.high())
-      .onFalse(shooterHood.low());
-      
+      .onTrue(intakeSubsystem.retract())
+      .onFalse(intakeSubsystem.stopDeploy());
+    
     //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
       Commands.run(() -> {
@@ -119,6 +120,11 @@ public class RobotContainer {
         intakeSubsystem
       )
     );
+
+    // Shooter (one-touch at pre-configured speed)
+    operatorController.b()
+      .onTrue(shooter.shoot())
+      .onFalse(shooter.stop());
     
     // Feeder (variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
@@ -147,25 +153,17 @@ public class RobotContainer {
     );
 
     // Shooter Hood (one-touch to preset positions)
-    operatorController.leftBumper()
-         .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
-         .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
-
-    //.onTrue(shooterHood.high());
     operatorController.rightBumper()
-      .onTrue(shooter.shoot())
-      .onFalse(shooter.stop());
+      .onTrue(shooterHood.high());
+    operatorController.leftBumper()
+      .onTrue(shooterHood.low());
     
-    // Intake deploy/retract
-    operatorController.y() // retract
-          .onTrue(intakeSubsystem.runDeploy(-0.15))
-          .onFalse(intakeSubsystem.stopDeploy());
+    // Feeder+Agitator+Intake
+    operatorController.x()
+    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
+    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
-    operatorController.a() // deploy
-      .onTrue(intakeSubsystem.runDeploy(0.15))
-      .onFalse(intakeSubsystem.stopDeploy());
-    }
-  
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -174,7 +172,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     //return autoChooser.getSelected();
-    return Commands.none();
+    return autoChooser.getSelected();
   }
 
   public void runRobotPeriodic() {
