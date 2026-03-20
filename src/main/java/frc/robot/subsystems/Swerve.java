@@ -149,7 +149,7 @@ public class Swerve {
             )
         );
     }
-
+    
     public Command getSwerveAuto() {
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
