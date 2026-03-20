@@ -149,10 +149,6 @@ public class Swerve {
             )
         );
     }
-
-    public CommandSwerveDrivetrain getDrivetrain() {
-        return drivetrain;
-    }
     
     public Command getSwerveAuto() {
         // Simple drive forward auton
