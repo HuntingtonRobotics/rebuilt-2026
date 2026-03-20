@@ -3,61 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.434602409638554,
-        "y": 4.035
+        "x": 3.6113181818181816,
+        "y": 4.107147727272728
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7106696402292876,
-        "y": 3.98142178715836
-      },
-      "isLocked": false,
-      "linkedName": "shoot"
-    },
-    {
-      "anchor": {
-        "x": 3.042781740370898,
-        "y": 0.7938659058487882
-      },
-      "prevControl": {
-        "x": 2.163511119780607,
-        "y": 1.4172577373354822
-      },
-      "nextControl": {
-        "x": 3.7220786486655033,
-        "y": 0.31225292587598874
+        "x": 4.003660551247125,
+        "y": 4.188295878481288
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.295877318116975,
-        "y": 0.7938659058487882
+        "x": 1.879772727272727,
+        "y": 4.107147727272728
       },
       "prevControl": {
-        "x": 8.532600672967925,
-        "y": 0.7134790084829168
+        "x": 1.745784090909091,
+        "y": 3.0867727272727263
       },
       "nextControl": {
-        "x": 7.9696325159572545,
-        "y": 0.9046526401947731
+        "x": 1.9123215872351673,
+        "y": 4.355019814679006
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.295877318116975,
-        "y": 6.034771084337349
+        "x": 0.9830795454545451,
+        "y": 5.931454545454546
       },
       "prevControl": {
-        "x": 8.400334917115353,
-        "y": 5.720968347681436
+        "x": 1.0725389593414714,
+        "y": 5.593319198542119
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "mid depot up"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -74,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0000000004695
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.44371075975023716
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
