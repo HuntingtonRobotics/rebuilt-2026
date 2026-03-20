@@ -69,10 +69,10 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shoot", shooter.shoot(1.13));
+    NamedCommands.registerCommand("shoot", shooter.shoot(1.13).andThen(Commands.waitSeconds(0.2)));
     NamedCommands.registerCommand("shootStop", shooter.stop());
     NamedCommands.registerCommand("stopIntake", intakeSubsystem.stopDeploy());
-    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(.32));
+    NamedCommands.registerCommand("deployIntake", Commands.race(intakeSubsystem.runDeploy(.32), Commands.waitSeconds(1.5)));
     NamedCommands.registerCommand("retractIntake", intakeSubsystem.retract());
     NamedCommands.registerCommand("runIntake", intakeSubsystem.spin());
     NamedCommands.registerCommand("agitate", agitator.agitate());
@@ -156,8 +156,6 @@ public class RobotContainer {
     );
 
     // Shooter Hood (one-touch to preset positions)
-    operatorController.rightBumper()
-      .onTrue(shooterHood.high());
     operatorController.leftBumper()
          .onTrue(shooterFeeder.feed()
              .alongWith(agitator.agitate())
@@ -165,7 +163,6 @@ public class RobotContainer {
              .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture())))
          .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
-    //.onTrue(shooterHood.high());
     operatorController.rightBumper()
       .onTrue(shooter.shoot(0.6))
       .onFalse(shooter.stop());
