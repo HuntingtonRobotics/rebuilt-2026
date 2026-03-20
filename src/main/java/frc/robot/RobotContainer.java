@@ -101,12 +101,7 @@ public class RobotContainer {
   private void configureGameplayBindings() {
     //TODO - refactor into methods
     //  Deploy/Retract Intake
-    operatorController.povUp()
-      .onTrue(intakeSubsystem.runDeploy(1))
-      .onFalse(intakeSubsystem.stopDeploy());
-    operatorController.povDown()
-      .onTrue(intakeSubsystem.retract())
-      .onFalse(intakeSubsystem.stopDeploy());
+  
     
     //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
@@ -164,18 +159,18 @@ public class RobotContainer {
          .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shoot(0.6))
+      .onTrue(shooter.shoot(0.7))
       .onFalse(shooter.stop());
-      //1800 RB
+      //2100 RB low
       
       operatorController.leftTrigger()
         .onTrue(shooter.shoot(10))
-        //3900 LT
+        //3900 LT Passing
         .onFalse(shooter.stop());
       
         operatorController.rightTrigger()
         .onTrue(shooter.shoot(1.13))
-        //3400 (Trench) RT
+        //3400 (Trench) RT 
         .onFalse(shooter.stop());
      operatorController.x()
      .onTrue(intakeSubsystem.spin())
