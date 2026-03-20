@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -50,19 +51,17 @@ public class RobotContainer {
     new CommandXboxController(OperatorConstants.OperatorControllerPort);
 
   /* Path follower */
-  //private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser;
   public RobotContainer() {
     registerDashboardProperties();
 
     registerNamedCommands();
-    
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    autoChooser = AutoBuilder.buildAutoChooser("Just Shoot");
+    SmartDashboard.putData(DashboardConstants.AutoModeKey, autoChooser);
     
     configureBindings();
     // Add camera feed to dashboard
@@ -70,11 +69,16 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shoot", shooter.shoot());
+    NamedCommands.registerCommand("shoot", shooter.shoot(1.13));
     NamedCommands.registerCommand("shootStop", shooter.stop());
     NamedCommands.registerCommand("stopIntake", intakeSubsystem.stopDeploy());
-    NamedCommands.registerCommand("runIntake", intakeSubsystem.runDeploy(1.0));
+    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(.32));
     NamedCommands.registerCommand("retractIntake", intakeSubsystem.retract());
+    NamedCommands.registerCommand("runIntake", intakeSubsystem.spin());
+    NamedCommands.registerCommand("agitate", agitator.agitate());
+    NamedCommands.registerCommand("feed", shooterFeeder.feed());
+
+    // Add more commands here as needed
   }
 
   private void registerDashboardProperties() {
@@ -168,7 +172,7 @@ public class RobotContainer {
       //1800 RB
       
       operatorController.leftTrigger()
-        .onTrue(shooter.shoot(1.3))
+        .onTrue(shooter.shoot(10))
         //3900 LT
         .onFalse(shooter.stop());
       
@@ -181,11 +185,11 @@ public class RobotContainer {
      .onFalse(intakeSubsystem.stop());
     // Intake deploy/retract
     operatorController.y() // retract
-          .onTrue(intakeSubsystem.runDeploy(-0.35))
+          .onTrue(intakeSubsystem.runDeploy(-0.32))
           .onFalse(intakeSubsystem.stopDeploy());
 
     operatorController.a() // deploy
-      .onTrue(intakeSubsystem.runDeploy(0.35))
+      .onTrue(intakeSubsystem.runDeploy(0.32))
       .onFalse(intakeSubsystem.stopDeploy());
     }
  
