@@ -177,7 +177,7 @@ public class RobotContainer {
      .onFalse(intakeSubsystem.stop());
     // Intake deploy/retract
     operatorController.y() // retract
-          .onTrue(intakeSubsystem.runDeploy(-0.32))
+          .onTrue(intakeSubsystem.runDeploy(-.5))
           .onFalse(intakeSubsystem.stopDeploy());
 
     operatorController.a() // deploy
@@ -191,7 +191,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //return autoChooser.getSelected();
     return autoChooser.getSelected();
   }
 
