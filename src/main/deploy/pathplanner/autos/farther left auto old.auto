@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "farther auto-p1 2"
+            "pathName": "left auto- p1 farther"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "farther auto-p2 2"
+            "pathName": "left auto-p2 farther"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "farther auto-p3 2"
+            "pathName": "left auto-farther p3"
           }
         },
         {

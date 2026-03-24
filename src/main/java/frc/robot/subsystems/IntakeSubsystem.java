@@ -72,8 +72,8 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param speed The speed to spin the motor at, between -1 and 1.
      * @return A command that spins the motor at the given speed.
      */
-    public Command spin(double speed) {
-        return this.runOnce(() -> collectorMotor.set(speed));
+    public Command spin() {
+        return this.runOnce(() -> collectorMotor.set(-1));
     }
     /**
      * Stop the collector motor.

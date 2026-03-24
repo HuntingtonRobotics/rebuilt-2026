@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -31,7 +32,7 @@ import frc.robot.subsystems.Shooter.FlywheelShooter;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
+  
   // Subsystems
   private final Swerve swerveDrivetrain = new Swerve();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -51,19 +52,17 @@ public class RobotContainer {
     new CommandXboxController(OperatorConstants.OperatorControllerPort);
 
   /* Path follower */
-  //private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser;
   public RobotContainer() {
     registerDashboardProperties();
 
     registerNamedCommands();
-    
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    autoChooser = AutoBuilder.buildAutoChooser("Just Shoot");
+    SmartDashboard.putData(DashboardConstants.AutoModeKey, autoChooser);
     
     configureBindings();
     // Add camera feed to dashboard
@@ -71,11 +70,16 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shoot", shooter.shoot());
+    NamedCommands.registerCommand("shoot", shooter.shoot(1.13).andThen(Commands.waitSeconds(0.2)));
     NamedCommands.registerCommand("shootStop", shooter.stop());
     NamedCommands.registerCommand("stopIntake", intakeSubsystem.stopDeploy());
-    NamedCommands.registerCommand("runIntake", intakeSubsystem.runDeploy(1.0));
+    NamedCommands.registerCommand("deployIntake", Commands.race(intakeSubsystem.runDeploy(.32), Commands.waitSeconds(1.5)));
     NamedCommands.registerCommand("retractIntake", intakeSubsystem.retract());
+    NamedCommands.registerCommand("runIntake", intakeSubsystem.spin());
+    NamedCommands.registerCommand("agitate", agitator.agitate());
+    NamedCommands.registerCommand("feed", shooterFeeder.feed());
+
+    // Add more commands here as needed
   }
 
   private void registerDashboardProperties() {
@@ -95,28 +99,22 @@ public class RobotContainer {
   private void configureDriveBindings() {
     swerveDrivetrain.configureBindings(driverController);
   }
-
   private void configureGameplayBindings() {
     //TODO - refactor into methods
     //  Deploy/Retract Intake
-    operatorController.povUp()
-      .onTrue(intakeSubsystem.runDeploy(1))
-      .onFalse(intakeSubsystem.stopDeploy());
-    operatorController.povDown()
-      .onTrue(intakeSubsystem.retract())
-      .onFalse(intakeSubsystem.stopDeploy());
+  
     
     //  Intake Collector (variable speed with L/R triggers)
     intakeSubsystem.setDefaultCommand(
       Commands.run(() -> {
           double forward = operatorController.getRightTriggerAxis(); // 0 → 1
-          double reverse = operatorController.getLeftTriggerAxis();  // 0 → 1
+          double reverse = operatorController.getLeftTriggerAxis();  // 0 → 1s
           double speed = forward - reverse;  // -1 → 1
           double deadband = 0.05;
           if (Math.abs(speed) < deadband) {
               speed = 0;
           }
-          intakeSubsystem.spin(speed);
+          intakeSubsystem.spin();
         },
         intakeSubsystem
       )
@@ -154,18 +152,40 @@ public class RobotContainer {
     );
 
     // Shooter Hood (one-touch to preset positions)
-    operatorController.rightBumper()
-      .onTrue(shooterHood.high());
     operatorController.leftBumper()
-      .onTrue(shooterHood.low());
-    
-    // Feeder+Agitator+Intake
-    operatorController.x()
-    .onTrue(shooterFeeder.feed().alongWith(agitator.agitate()).alongWith(intakeSubsystem.spin(-1)))
-    .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+         .onTrue(shooterFeeder.feed()
+             .alongWith(agitator.agitate())
+             .alongWith(intakeSubsystem.spin())
+             .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture())))
+         .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
-  }
+    operatorController.rightBumper()
+      .onTrue(shooter.shoot(0.7))
+      .onFalse(shooter.stop());
+      //2100 RB low
+      
+      operatorController.leftTrigger()
+        .onTrue(shooter.shoot(10))
+        //3900 LT Passing
+        .onFalse(shooter.stop());
+      
+        operatorController.rightTrigger()
+        .onTrue(shooter.shoot(1.13))
+        //3400 (Trench) RT 
+        .onFalse(shooter.stop());
+     operatorController.x()
+     .onTrue(intakeSubsystem.spin())
+     .onFalse(intakeSubsystem.stop());
+    // Intake deploy/retract
+    operatorController.y() // retract
+          .onTrue(intakeSubsystem.runDeploy(-0.32))
+          .onFalse(intakeSubsystem.stopDeploy());
 
+    operatorController.a() // deploy
+      .onTrue(intakeSubsystem.runDeploy(0.32))
+      .onFalse(intakeSubsystem.stopDeploy());
+    }
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -184,7 +204,9 @@ public class RobotContainer {
     agitatorPeriodic();
     limelightPeriodic();
   }
-
+  
+  
+  
   private void shooterPeriodic() {
     SmartDashboard.putNumber("Left Shooter Speed", shooter.getSpeedLeft().getValueAsDouble());
     SmartDashboard.putNumber("Right Shooter Speed", shooter.getSpeedRight().getValueAsDouble());

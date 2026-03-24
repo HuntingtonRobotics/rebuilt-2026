@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "farther auto-p2 2"
+            "pathName": "farther auto-p2 3"
           }
         },
         {
@@ -62,18 +62,6 @@
           "type": "wait",
           "data": {
             "waitTime": 6.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "farther auto-p3 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
           }
         }
       ]

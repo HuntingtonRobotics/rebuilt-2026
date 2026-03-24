@@ -21,30 +21,6 @@
           "data": {
             "waitTime": 1.0
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left auto-p2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 6.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left auto-p3 short"
-          }
         }
       ]
     }
