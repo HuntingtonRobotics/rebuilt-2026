@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -181,6 +182,7 @@ public class RobotContainer {
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
+    limelightPeriodic();
   }
 
   private void shooterPeriodic() {
@@ -212,5 +214,12 @@ public class RobotContainer {
 
   private void agitatorPeriodic() {
     SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
+  }
+
+  private void limelightPeriodic(){
+    var llMeasurement =LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    if (llMeasurement != null && llMeasurement.tagCount > 0){
+      //Ben started this
+    }
   }
 }

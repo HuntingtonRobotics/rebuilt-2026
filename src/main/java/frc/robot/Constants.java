@@ -25,7 +25,33 @@ public final class Constants {
     public static final int DriverControllerPort = 0;
     public static final int OperatorControllerPort = 1;
   }
+  public static class VisionConstants {
+    // Limelight name (match what's configured at http://limelight.local)
+    public static final String LIMELIGHT_NAME = "";
 
+    // AprilTag IDs to target
+    public static final int[] TARGET_TAG_IDS = {12, 15};
+
+    // Rotation PID - controls left/right alignment to center tag (tx = 0)
+    public static final double APRILTAG_ROTATION_KP = 0.02;
+    public static final double APRILTAG_ROTATION_KI = 0.0;
+    public static final double APRILTAG_ROTATION_KD = 0.001;
+    public static final double APRILTAG_ROTATION_DEADBAND = 2.0; // degrees
+
+    // Drive PID - controls distance using target area
+    public static final double APRILTAG_DRIVE_KP = 0.05;
+    public static final double APRILTAG_DRIVE_KI = 0.0;
+    public static final double APRILTAG_DRIVE_KD = 0.001;
+    public static final double APRILTAG_TARGET_AREA = 2.0;   // % of frame, tune this
+    public static final double APRILTAG_AREA_TOLERANCE = 0.3; // % tolerance
+
+    // Speed limits - these are FRACTIONS of MaxSpeed/MaxAngularRate (0.0 to 1.0)
+    // since CTRE scales by MaxSpeed and MaxAngularRate
+    public static final double APRILTAG_MAX_ROTATION_SPEED = 0.4;
+    public static final double APRILTAG_MIN_ROTATION_SPEED = 0.05;
+    public static final double APRILTAG_MAX_DRIVE_SPEED = 0.3;
+    public static final double APRILTAG_MIN_DRIVE_SPEED = 0.05;
+}
   public static class DashboardConstants {
     public static final String AutoModeKey = "Auto Mode";
     public static final String VisionOdoEnabledKey = "visionOdoEnabled";

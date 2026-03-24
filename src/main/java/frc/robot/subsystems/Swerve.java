@@ -32,6 +32,16 @@ public class Swerve {
     public Swerve() {
     }
 
+
+
+    public void applyVisionDrive(double velocityX, double velocityY, double rotRate) {
+    drivetrain.setControl(
+        drive.withVelocityX(velocityX)
+             .withVelocityY(velocityY)
+             .withRotationalRate(rotRate)
+        );
+    }   
+
      public void configureBindings(CommandXboxController controller) {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
