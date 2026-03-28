@@ -19,12 +19,6 @@
                 "data": {
                   "pathName": "ball cross"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": null
-                }
               }
             ]
           }

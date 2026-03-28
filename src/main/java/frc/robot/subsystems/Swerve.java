@@ -6,6 +6,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -14,7 +15,7 @@ import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
 
 
-public class Swerve {
+public class Swerve extends SubsystemBase{
     private double MaxSpeed = Constants.SwerveConstants.MaxSpeed;
     private double MaxAngularRate = Constants.SwerveConstants.MaxAngularRate;
 
@@ -25,7 +26,7 @@ public class Swerve {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     // -------------------------------------------------------
     // Limelight Aim

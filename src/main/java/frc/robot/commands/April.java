@@ -12,7 +12,7 @@ public class April extends Command {
   private final Swerve m_driveSubsystem;
   private final PIDController m_rotationPID;
   private final PIDController m_drivePID;
-  private final int[] m_targetTags = {12, 15};
+  private final int[] m_targetTags = {2,5,10,18,21,26};
   private int executionCount = 0;
   public double MaxSpeed = Constants.SwerveConstants.MaxSpeed;
   public double MaxAngularRate = Constants.SwerveConstants.MaxAngularRate;
@@ -22,7 +22,7 @@ public class April extends Command {
 
   public April(Swerve driveSubsystem) {
     m_driveSubsystem = driveSubsystem;
-    
+    addRequirements(m_driveSubsystem);
 
     // Initialize PID controllers with constants
     m_rotationPID = new PIDController(
@@ -44,11 +44,6 @@ public class April extends Command {
     System.out.println("[AlignToAprilTag] Command created, targeting tags: 12, 15");
     System.out.println("[AlignToAprilTag] Target area: " + frc.robot.Constants.VisionConstants.APRILTAG_TARGET_AREA + "%, tolerance: " + frc.robot.Constants.VisionConstants.APRILTAG_AREA_TOLERANCE + "%");
     System.out.println("[AlignToAprilTag] Limelight IP: 10.80.92.200");
-  }
-  
-  private void addRequirements(Swerve m_driveSubsystem2) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'addRequirements'");
   }
 
   @Override
@@ -111,7 +106,7 @@ public class April extends Command {
       }
 
       if (shouldLog) {
-        System.out.println("[AlignToAprilTag] Is valid tag (12 or 15): " + isValidTag);
+        System.out.println("[AlignToAprilTag] Is valid tag: " + isValidTag);
       }
 
       if (isValidTag) {
@@ -177,6 +172,7 @@ public class April extends Command {
         if (m_drivePID.atSetpoint()) {
           forwardSpeed = 0;
           if (shouldLog) System.out.println("[AlignToAprilTag] At setpoint, stopping");
+          //calculate shooting here
         } else if (distanceError > areaTolerance) {
           // Too far, need to move forward (NEGATIVE speed for this robot's X axis)
           forwardSpeed = -Math.abs(pidOutput);
