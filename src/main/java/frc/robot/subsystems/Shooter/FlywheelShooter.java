@@ -6,8 +6,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,10 +23,14 @@ import frc.robot.commands.WaitForSpeedCommand;
  * </p>
  */
 public class FlywheelShooter extends SubsystemBase {
-    private static final double rpm = 2500;
-    private static final double RotationsPerSecond = rpm/60;
+    private static final double rightRpm = 2500;
+    private static final double leftRpm = 2500;
+    private static final double rightRotationsPerSecond = rightRpm/60;
+    private static final double leftRotationsPerSecond = leftRpm/60;
+    private static final double accelRPS = 30;
     private final TalonFX krakenMotorLeft = new TalonFX(61);
     private final TalonFX krakenMotorRight = new TalonFX(60);
+    private final SparkMax acceleratorMotor = new SparkMax(59, MotorType.kBrushless); //change channel
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
 
@@ -50,11 +57,12 @@ public class FlywheelShooter extends SubsystemBase {
         return new ParallelCommandGroup(
             // setControl only needs to be called once to keep velocity
             this.runOnce(() -> {
-                krakenMotorLeft.setControl(velocityVoltage.withVelocity(RotationsPerSecond));
-                krakenMotorRight.setControl(velocityVoltage.withVelocity(-RotationsPerSecond));
+                krakenMotorLeft.setControl(velocityVoltage.withVelocity(leftRotationsPerSecond));
+                krakenMotorRight.setControl(velocityVoltage.withVelocity(-rightRotationsPerSecond));
+                acceleratorMotor.set(accelRPS);
             }),
-            new WaitForSpeedCommand(krakenMotorLeft, RotationsPerSecond, 0.1),
-            new WaitForSpeedCommand(krakenMotorRight, RotationsPerSecond, 0.1)
+            new WaitForSpeedCommand(krakenMotorLeft, leftRotationsPerSecond, 0.1),
+            new WaitForSpeedCommand(krakenMotorRight, rightRotationsPerSecond, 0.1)
         );
     }
 
@@ -62,6 +70,7 @@ public class FlywheelShooter extends SubsystemBase {
         return this.runOnce(() -> {
             krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
             krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50));
+            acceleratorMotor.set(accelRPS);
         });
     }
     
@@ -69,6 +78,7 @@ public class FlywheelShooter extends SubsystemBase {
         return this.runOnce(() -> {
             krakenMotorLeft.setControl(brake);
             krakenMotorRight.setControl(brake);
+            acceleratorMotor.stopMotor();
         });
     }
 
@@ -92,3 +102,4 @@ public class FlywheelShooter extends SubsystemBase {
     }
 
 }
+//jake is the best ( ͡° ͜ʖ ͡°) ༼ ◥◣_◢◤ ༽ ✿∗˵╰༼✪ᗜ✪༽╯˵∗✿ Kieran is also here ᕙ(▀̿ĺ̯▀̿ ̿)ᕗ

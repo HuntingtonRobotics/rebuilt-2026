@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.April;
 import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -120,10 +122,11 @@ public class RobotContainer {
     );
 
     // Shooter (one-touch at pre-configured speed)
+    /*
     operatorController.b()
       .onTrue(shooter.shoot())
       .onFalse(shooter.stop());
-    
+    */
     // Feeder (variable speed with Left Stick Y-Axis)
     shooterFeeder.setDefaultCommand(
       Commands.run(() -> {
@@ -183,6 +186,9 @@ public class RobotContainer {
     operatorController.a() // deploy
       .onTrue(intakeSubsystem.runDeploy(0.32))
       .onFalse(intakeSubsystem.stopDeploy());
+
+    operatorController.b().whileTrue(new April(swerveDrivetrain));
+
     }
  
   /**
@@ -200,6 +206,7 @@ public class RobotContainer {
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
+    limelightPeriodic();
   }
   
   
@@ -233,5 +240,12 @@ public class RobotContainer {
 
   private void agitatorPeriodic() {
     SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
+  }
+
+  private void limelightPeriodic(){
+    var llMeasurement =LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    if (llMeasurement != null && llMeasurement.tagCount > 0){
+
+    }
   }
 }

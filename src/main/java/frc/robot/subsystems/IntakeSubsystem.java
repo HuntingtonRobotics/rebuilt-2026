@@ -13,9 +13,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 
 /** Subsystem for the intake device.
  * 
@@ -31,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static final String ResetEncoderDashboardKey = "Reset Intake Deployer Encoder";
 
     // Collector motor (rollers)
-    private final SparkMax collectorMotor;
+    private SparkMax collectorMotor;
 
     // Deployer motor with closed-loop control
     //  there are two physical motors on robot but only one needs to be configured here; the other is set to follow
@@ -42,6 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double intakePos;
 
     public IntakeSubsystem() {
+        if (!Robot.isSimulation()) {}
         collectorMotor = new SparkMax(51, MotorType.kBrushless);
         deployMotor = new SparkMax(56, MotorType.kBrushless);
         closedLoopController = deployMotor.getClosedLoopController();
@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             // Set PID values for position control. We don't need to pass a closed loop
             // slot, as it will default to slot 0.
-            .p(0.1)
+            .p(0.08)
             .i(0)
             .d(0)
             .outputRange(-1, 1);
@@ -105,12 +105,12 @@ public class IntakeSubsystem extends SubsystemBase {
     // These two methods are the same but with different Dashboard defaults
     public Command deploy() {
         double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(-16.50, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(1.00, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
 
     public Command retract() {
         double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(0.0, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return this.runOnce(() -> closedLoopController.setSetpoint(-16.45, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     
     public Command stopDeploy() {
