@@ -158,8 +158,8 @@ public class RobotContainer {
          .onTrue(shooterFeeder.feed()
              .alongWith(agitator.agitate())
              .alongWith(intakeSubsystem.spin())
-             .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture())))
-         .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+         )
+             .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
       .onTrue(shooter.shoot(0.7))

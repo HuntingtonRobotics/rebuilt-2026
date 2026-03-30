@@ -11,7 +11,7 @@ public class Agitator extends SubsystemBase {
   // *** CHANGE IDs ***
   //  set motorLeft to FOLLOW in REV UI
   // private final SparkMax motorLeft = new SparkMax(6, MotorType.kBrushless);
-  private final SparkMax motorRight = new SparkMax(52, MotorType.kBrushless);
+  private final SparkMax motorRight = new SparkMax(50, MotorType.kBrushless);
 
   public Command shakeIt() {
     return this.startEnd(

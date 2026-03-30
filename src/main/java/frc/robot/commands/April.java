@@ -17,7 +17,7 @@ public class April extends Command {
   public double MaxSpeed = Constants.SwerveConstants.MaxSpeed;
   public double MaxAngularRate = Constants.SwerveConstants.MaxAngularRate;
   // Try different possible Limelight names in NetworkTables
-  private static final String[] POSSIBLE_LIMELIGHT_NAMES = {"", "limelight", "limelight-front"};
+  private static final String[] POSSIBLE_LIMELIGHT_NAMES = {"limelight"};
   private String activeLimelightName = "";
 
   public April(Swerve driveSubsystem) {

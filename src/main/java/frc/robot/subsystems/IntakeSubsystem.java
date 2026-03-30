@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         if (!Robot.isSimulation()) {}
-        collectorMotor = new SparkMax(51, MotorType.kBrushless);
+        collectorMotor = new SparkMax(52, MotorType.kBrushless);
         deployMotor = new SparkMax(56, MotorType.kBrushless);
         closedLoopController = deployMotor.getClosedLoopController();
         encoder = deployMotor.getEncoder();
