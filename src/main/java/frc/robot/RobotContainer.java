@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.April;
-import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 //import frc.robot.subsystems.Intake.IntakeCollector;
@@ -45,7 +44,6 @@ public class RobotContainer {
   private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
-  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
   private final CommandXboxController driverController =
   
     new CommandXboxController(OperatorConstants.DriverControllerPort);
@@ -141,29 +139,23 @@ public class RobotContainer {
 
     // Shooter (variable speed with Right Stick Y-Axis)
     shooter.setDefaultCommand(
-      Commands.run(() -> {
-          double speed = -operatorController.getRightY();
-          double deadband = 0.05;
-          if (Math.abs(speed) < deadband) {
-              speed = 0;
-          }
-          shooter.shoot(speed);
-        },
-        shooter
-      )
-    );
+    Commands.run(() -> {
+        double speed = -operatorController.getRightY();
+        if (Math.abs(speed) < 0.05) speed = 0;
+        shooter.setSpeed(speed);
+    }, shooter)
+);
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(shooterFeeder.feed1()
+         .onTrue(intakeSubsystem.spin()
              .alongWith(agitator.shakeIt())
-             .alongWith(intakeSubsystem.spin())
          
              )
-             .onFalse(shooterFeeder.stop1().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()).alongWith(intakeSubsystem.stop()));
+             .onFalse(agitator.stop().alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shootWithPID(2000,2000)
+      .onTrue(shooter.shootWithPID(2750,2500)
         .alongWith(shooterFeeder.feed())
        )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));

@@ -12,6 +12,7 @@ import frc.robot.pid;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.WaitForSpeedCommand;
@@ -31,11 +32,10 @@ public class FlywheelShooter extends SubsystemBase {
     private static final double accelRPS = 30;
     private final TalonFX krakenMotorLeft = new TalonFX(61);
     private final TalonFX krakenMotorRight = new TalonFX(60);
-    private final SparkMax acceleratorMotor = new SparkMax(59, MotorType.kBrushless); //change channel
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
     private final CANcoder bottomEncoder = new CANcoder(50);
-    private final CANcoder topEncoder = new CANcoder(60);
+    private final CANcoder topEncoder = new CANcoder(67);
     private final pid pid = new pid();
 
     public FlywheelShooter() {
@@ -57,46 +57,44 @@ public class FlywheelShooter extends SubsystemBase {
         applyConfig(krakenMotorRight, config);
     }
 
-    public Command shoot() {
-        return new ParallelCommandGroup(
-            // setControl only needs to be called once to keep velocity
-            this.runOnce(() -> {
-                krakenMotorLeft.setControl(velocityVoltage.withVelocity(leftRotationsPerSecond));
-                krakenMotorRight.setControl(velocityVoltage.withVelocity(-rightRotationsPerSecond));
-                acceleratorMotor.set(accelRPS);
-            }),
-            new WaitForSpeedCommand(krakenMotorLeft, leftRotationsPerSecond, 0.1),
-            new WaitForSpeedCommand(krakenMotorRight, rightRotationsPerSecond, 0.1)
-        );
-    }
-
+public Command shoot() {
+    return this.runOnce(() -> {
+        krakenMotorLeft.setControl(velocityVoltage.withVelocity(leftRotationsPerSecond));
+        krakenMotorRight.setControl(velocityVoltage.withVelocity(-rightRotationsPerSecond));
+    });
+}
     public Command shoot(double speed) {
         return this.runOnce(() -> {
             krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50)); //black wheels
             krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50)); //blue wheels
-            acceleratorMotor.set(accelRPS);
         });
     }
     
-    public Command shootWithPID(double rpmTop, double rpmBottom) {
+    public Command shootWithPID(double rpmBottom, double rpmTop) {
          return this.run(() -> {
         double topRPS = topEncoder.getVelocity().getValueAsDouble();
         double bottomRPS = bottomEncoder.getVelocity().getValueAsDouble();
 
-        double topOutput = pid.calculate(rpmTop / 60, topRPS, 0.02, 0.00075, 0.0, 0.0, 0.0015);
-        double bottomOutput = pid.calculate(rpmBottom / 60, bottomRPS, 0.02, 0.00075, 0.0, 0.0, 0.0015);
-
-        krakenMotorRight.setControl(velocityVoltage.withVelocity(topOutput));
-        krakenMotorLeft.setControl(velocityVoltage.withVelocity(bottomOutput));
+        double topOutput = pid.calculate(rpmTop, topRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
+        double bottomOutput = pid.calculate(rpmBottom, bottomRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
+        System.out.println("Top output: " + topOutput + ", Bottom output: " + bottomOutput);
+        krakenMotorRight.set((topOutput)/4500);
+        krakenMotorLeft.set((bottomOutput * -1)/3000);  // invert bottom motor
     });
     }
 
     public Command stop() {
         return this.runOnce(() -> {
+            krakenMotorRight.set(0);
+            krakenMotorLeft.set(0);
             krakenMotorLeft.setControl(brake);
             krakenMotorRight.setControl(brake);
-            acceleratorMotor.stopMotor();
         });
+    }
+
+    public void setSpeed(double speed) {
+        krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
+        krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50));
     }
 
     public StatusSignal<AngularVelocity> getSpeedLeft() {
@@ -119,4 +117,3 @@ public class FlywheelShooter extends SubsystemBase {
     }
 
 }
-//jake is the best ( ͡° ͜ʖ ͡°) ༼ ◥◣_◢◤ ༽ ✿∗˵╰༼✪ᗜ✪༽╯˵∗✿ Kieran is also here ᕙ(▀̿ĺ̯▀̿ ̿)ᕗ
