@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FlywheelHood extends SubsystemBase {
+    /* 
     public static final String ResetEncoderDashboardKey = "Reset Hood Position Encoder";
     private SparkMax motor;
     private SparkMaxConfig motorConfig;
@@ -59,5 +60,5 @@ public class FlywheelHood extends SubsystemBase {
     public double getPosition() {
         return encoder.getPosition();
     }
-    
+    */
 }

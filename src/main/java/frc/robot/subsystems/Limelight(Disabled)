@@ -1,0 +1,36 @@
+package frc.robot.subsystems;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Limelight extends SubsystemBase {
+    private boolean tracking;
+    private final Swerve drive;
+
+    public Limelight(Swerve c) {
+        drive = c;
+    }
+
+    public Limelight() {
+        drive = null;
+    }
+
+    public Command turnToTag() {
+        if (drive == null) return Commands.none();
+        return drive.turnToTagCommand(() -> {
+            double tx = LimelightHelpers.getTX("limelightTurret");
+            if (tx > 0.1) return 5.0;
+            if (tx < -0.1) return -5.0;
+            return 0.0;
+        });
+    }
+
+    public Command LimeStart() {
+        return Commands.runOnce(() -> tracking = true);
+    }
+
+    public Command LimeStop() {
+        return Commands.runOnce(() -> tracking = false);
+    }
+}
