@@ -79,10 +79,16 @@ public class FlywheelShooter extends SubsystemBase {
     }
     
     public Command shootWithPID(double rpmTop, double rpmBottom) {
-        return this.runOnce(() -> {
-            krakenMotorRight.setControl(velocityVoltage.withVelocity(pid.calculate(rpmTop/60, topEncoder.getVelocity().getValueAsDouble(), 0.02, 0.11, 0.0, 0.000025, 0.12)/6000));
-            krakenMotorLeft.setControl(velocityVoltage.withVelocity(pid.calculate(rpmBottom/60, bottomEncoder.getVelocity().getValueAsDouble(), 0.02, 0.11, 0.0, 0.000025, 0.12)/6000));
-        });
+         return this.run(() -> {
+        double topRPS = topEncoder.getVelocity().getValueAsDouble();
+        double bottomRPS = bottomEncoder.getVelocity().getValueAsDouble();
+
+        double topOutput = pid.calculate(rpmTop / 60, topRPS, 0.02, 0.00075, 0.0, 0.0, 0.0015);
+        double bottomOutput = pid.calculate(rpmBottom / 60, bottomRPS, 0.02, 0.00075, 0.0, 0.0, 0.0015);
+
+        krakenMotorRight.setControl(velocityVoltage.withVelocity(topOutput));
+        krakenMotorLeft.setControl(velocityVoltage.withVelocity(bottomOutput));
+    });
     }
 
     public Command stop() {

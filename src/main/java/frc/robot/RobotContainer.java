@@ -155,22 +155,23 @@ public class RobotContainer {
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(shooterFeeder.feed()
+         .onTrue(shooterFeeder.feed1()
              .alongWith(agitator.shakeIt())
              .alongWith(intakeSubsystem.spin())
-         )
-             .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
-             
+         
+             )
+             .onFalse(shooterFeeder.stop1().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()).alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shoot(-1900.0/3000)//leave in this form
+      .onTrue(shooter.shootWithPID(2000,2000)
         .alongWith(shooterFeeder.feed())
-      )
+       )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
       operatorController.leftTrigger()
         .onTrue(shooter.shoot(-10)
         .alongWith(shooterFeeder.feed())
+        
       )
         //30000 LT Passing
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
