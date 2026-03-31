@@ -30,7 +30,7 @@ public final class Constants {
     public static final String LIMELIGHT_NAME = "";
 
     // AprilTag IDs to target
-    public static final int[] TARGET_TAG_IDS = {12, 15};
+    public static final int[] TARGET_TAG_IDS = {2,5,10,18,21,26};
 
     // Rotation PID - controls left/right alignment to center tag (tx = 0)
     public static final double APRILTAG_ROTATION_KP = 0.02;

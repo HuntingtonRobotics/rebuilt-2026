@@ -207,7 +207,6 @@ public class RobotContainer {
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
-    limelightPeriodic();
   }
   
   
@@ -241,12 +240,5 @@ public class RobotContainer {
 
   private void agitatorPeriodic() {
     SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
-  }
-
-  private void limelightPeriodic(){
-    var llMeasurement =LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-    if (llMeasurement != null && llMeasurement.tagCount > 0){
-
-    }
   }
 }
