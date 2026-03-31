@@ -203,7 +203,7 @@ public class RobotContainer {
 
   public void runRobotPeriodic() {
     shooterPeriodic();
-    shooterHoodPeriodic();
+
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
@@ -217,14 +217,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Right Shooter Speed", shooter.getSpeedRight().getValueAsDouble());
   }
 
-  private void shooterHoodPeriodic() {
-    SmartDashboard.putNumber("Hood Position", shooterHood.getPosition());
-    if (SmartDashboard.getBoolean(FlywheelHood.ResetEncoderDashboardKey, false)) {
-      SmartDashboard.putBoolean(FlywheelHood.ResetEncoderDashboardKey, false);
-      // Reset the encoder position to 0
-      shooterHood.resetEncoder();
-    }
-  }
+  
 
   private void intakeDeployerPeriodic() {
     SmartDashboard.putNumber(IntakeSubsystem.IntakeDeployerCurrentPosDashboardKey, intakeSubsystem.getPosition());
