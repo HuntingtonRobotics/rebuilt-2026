@@ -16,7 +16,7 @@ public class Agitator extends SubsystemBase {
   public Command shakeIt() {
     return this.startEnd(
       () -> {
-        motorRight.set(.5);
+        motorRight.set(-.85);
       },
       () -> {
         motorRight.set(0);
@@ -25,7 +25,7 @@ public class Agitator extends SubsystemBase {
   }
 
   public Command agitate() {
-    return this.runOnce(() -> motorRight.set(.5));
+    return this.runOnce(() -> motorRight.set(-.85));
   }
 
   public Command stop() {

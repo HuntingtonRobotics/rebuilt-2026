@@ -8,13 +8,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import frc.robot.pid;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.WaitForSpeedCommand;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 /** Subsystem for the flywheel shooter.
  * 
@@ -33,6 +34,9 @@ public class FlywheelShooter extends SubsystemBase {
     private final SparkMax acceleratorMotor = new SparkMax(59, MotorType.kBrushless); //change channel
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
+    private final CANcoder bottomEncoder = new CANcoder(50);
+    private final CANcoder topEncoder = new CANcoder(60);
+    private final pid pid = new pid();
 
     public FlywheelShooter() {
         // https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
@@ -68,12 +72,19 @@ public class FlywheelShooter extends SubsystemBase {
 
     public Command shoot(double speed) {
         return this.runOnce(() -> {
-            krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
-            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50));
+            krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50)); //black wheels
+            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50)); //blue wheels
             acceleratorMotor.set(accelRPS);
         });
     }
     
+    public Command shootWithPID(double rpmTop, double rpmBottom) {
+        return this.runOnce(() -> {
+            krakenMotorRight.setControl(velocityVoltage.withVelocity(pid.calculate(rpmTop/60, topEncoder.getVelocity().getValueAsDouble(), 0.02, 0.11, 0.0, 0.000025, 0.12)/6000));
+            krakenMotorLeft.setControl(velocityVoltage.withVelocity(pid.calculate(rpmBottom/60, bottomEncoder.getVelocity().getValueAsDouble(), 0.02, 0.11, 0.0, 0.000025, 0.12)/6000));
+        });
+    }
+
     public Command stop() {
         return this.runOnce(() -> {
             krakenMotorLeft.setControl(brake);

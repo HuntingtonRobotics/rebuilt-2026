@@ -135,7 +135,7 @@ public class RobotContainer {
         if (Math.abs(speed) < deadband) {
             speed = 0;
         }
-        shooterFeeder.feed(speed);
+        shooterFeeder.feed();
       }, shooterFeeder)
     );
 
@@ -156,26 +156,35 @@ public class RobotContainer {
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
          .onTrue(shooterFeeder.feed()
-             .alongWith(agitator.agitate())
+             .alongWith(agitator.shakeIt())
              .alongWith(intakeSubsystem.spin())
          )
              .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+             
 
     operatorController.rightBumper()
-      .onTrue(shooter.shoot(0.7))
-      .onFalse(shooter.stop());
-      //2100 RB low
+      .onTrue(shooter.shoot(-1900.0/3000)//leave in this form
+        .alongWith(shooterFeeder.feed())
+      )
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
       operatorController.leftTrigger()
-        .onTrue(shooter.shoot(10))
-        //3900 LT Passing
-        .onFalse(shooter.stop());
+        .onTrue(shooter.shoot(-10)
+        .alongWith(shooterFeeder.feed())
+      )
+        //30000 LT Passing
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
         operatorController.rightTrigger()
-        .onTrue(shooter.shoot(1.13))
+        .onTrue(shooter.shoot(-1.13)
+        .alongWith(shooterFeeder.feed())
+      )
         //3400 (Trench) RT 
-        .onFalse(shooter.stop());
-     operatorController.x()
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
+     
+     
+     
+      operatorController.x()
      .onTrue(intakeSubsystem.spin())
      .onFalse(intakeSubsystem.stop());
     // Intake deploy/retract
