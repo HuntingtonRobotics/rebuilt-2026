@@ -158,7 +158,8 @@ public class RobotContainer {
          .onTrue(shooterFeeder.feed()
              .alongWith(agitator.agitate())
              .alongWith(intakeSubsystem.spin())
-             .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture())))
+           //  .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture()))
+           )
          .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
@@ -207,6 +208,7 @@ public class RobotContainer {
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
+    limelightPeriodic();
   }
   
   
@@ -233,5 +235,12 @@ public class RobotContainer {
 
   private void agitatorPeriodic() {
     SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
+  }
+
+  private void limelightPeriodic(){
+    var llMeasurement =LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    if (llMeasurement != null && llMeasurement.tagCount > 0){
+
+    }
   }
 }
