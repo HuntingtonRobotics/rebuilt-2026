@@ -9,6 +9,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.pid;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +39,8 @@ public class FlywheelShooter extends SubsystemBase {
     private final CANcoder bottomEncoder = new CANcoder(50);
     private final CANcoder topEncoder = new CANcoder(67);
     private final pid pid = new pid();
+    private final PIDController pidController = new PIDController(0.5, 0.0, 0.0);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.12); // kS, kV
 
     public FlywheelShooter() {
         // https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
@@ -72,14 +76,19 @@ public Command shoot() {
     
     public Command shootWithPID(double rpmBottom, double rpmTop) {
          return this.run(() -> {
-        double topRPS = topEncoder.getVelocity().getValueAsDouble();
-        double bottomRPS = bottomEncoder.getVelocity().getValueAsDouble();
+        double topCurrentRps = topEncoder.getVelocity().getValueAsDouble();
+        double bottomCurrentRps = bottomEncoder.getVelocity().getValueAsDouble();
 
-        double topOutput = pid.calculate(rpmTop, topRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
-        double bottomOutput = pid.calculate(rpmBottom, bottomRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
+        double topSetpointRps = rpmTop / 60.0;
+        double bottomSetpointRps = rpmBottom / 60.0;
+
+        //double topOutput = pid.calculate(rpmTop, topRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
+        //double bottomOutput = pid.calculate(rpmBottom, bottomRPS, 0.02, 0.5, 0.0, 0.0, 0.5);
+        double topOutput = pidController.calculate(topCurrentRps, topSetpointRps) + feedforward.calculate(topSetpointRps);
+        double bottomOutput = pidController.calculate(bottomCurrentRps, bottomSetpointRps) + feedforward.calculate(bottomSetpointRps);
         System.out.println("Top output: " + topOutput + ", Bottom output: " + bottomOutput);
-        krakenMotorRight.set((topOutput)/4500);
-        krakenMotorLeft.set((bottomOutput * -1)/3000);  // invert bottom motor
+        krakenMotorRight.setControl(velocityVoltage.withVelocity(topOutput));
+        krakenMotorLeft.setControl(velocityVoltage.withVelocity(bottomOutput * -1));  // invert bottom motor
     });
     }
 
