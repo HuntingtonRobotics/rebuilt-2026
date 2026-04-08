@@ -1,5 +1,5 @@
 package frc.robot.subsystems.Shooter;
-
+/*  
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -60,5 +60,4 @@ public class FlywheelHood extends SubsystemBase {
     public double getPosition() {
         return encoder.getPosition();
     }
-    */
-}
+   /* */ 

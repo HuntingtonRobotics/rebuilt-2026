@@ -16,14 +16,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.April;
-import frc.robot.commands.ShootUntilEmpty;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 //import frc.robot.subsystems.Intake.IntakeCollector;
 //import frc.robot.subsystems.Intake.IntakeDeploy;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
-import frc.robot.subsystems.Shooter.FlywheelHood;
 import frc.robot.subsystems.Shooter.FlywheelShooter;
 
 /**
@@ -42,10 +40,8 @@ public class RobotContainer {
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
-  private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
-  private final ShootUntilEmpty shootUntilEmpty = new ShootUntilEmpty(agitator, shooterFeeder, shooter, intakeSubsystem);
   private final CommandXboxController driverController =
   
     new CommandXboxController(OperatorConstants.DriverControllerPort);
@@ -135,52 +131,56 @@ public class RobotContainer {
         if (Math.abs(speed) < deadband) {
             speed = 0;
         }
-        shooterFeeder.feed(speed);
+        shooterFeeder.feed();
       }, shooterFeeder)
     );
 
     // Shooter (variable speed with Right Stick Y-Axis)
     shooter.setDefaultCommand(
-      Commands.run(() -> {
-          double speed = -operatorController.getRightY();
-          double deadband = 0.05;
-          if (Math.abs(speed) < deadband) {
-              speed = 0;
-          }
-          shooter.shoot(speed);
-        },
-        shooter
-      )
-    );
+    Commands.run(() -> {
+        double speed = -operatorController.getRightY();
+        if (Math.abs(speed) < 0.05) speed = 0;
+        shooter.setSpeed(speed);
+    }, shooter)
+);
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(shooterFeeder.feed()
-             .alongWith(agitator.agitate())
-             .alongWith(intakeSubsystem.spin())
-             .alongWith(Commands.runOnce(() -> CameraServer.startAutomaticCapture())))
-         .onFalse(shooterFeeder.stop().alongWith(agitator.stop()).alongWith(intakeSubsystem.stop()));
+         .onTrue(intakeSubsystem.spin()
+             .alongWith(agitator.shakeIt())
+         
+             )
+             .onFalse(agitator.stop().alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shoot(0.7))
-      .onFalse(shooter.stop());
-      //2100 RB low
+      .onTrue(shooter.shootWithPID(2750,2500)
+        .alongWith(shooterFeeder.feed())
+       )
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
       operatorController.leftTrigger()
-        .onTrue(shooter.shoot(10))
-        //3900 LT Passing
-        .onFalse(shooter.stop());
+        .onTrue(shooter.shoot(-10)
+        .alongWith(shooterFeeder.feed())
+        
+      )
+        //30000 LT Passing
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
         operatorController.rightTrigger()
-        .onTrue(shooter.shoot(1.13))
+        .onTrue(shooter.shoot(-1.13)
+        .alongWith(shooterFeeder.feed())
+      )
         //3400 (Trench) RT 
-        .onFalse(shooter.stop());
-     operatorController.x()
+        .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
+     
+     
+     
+      operatorController.x()
      .onTrue(intakeSubsystem.spin())
      .onFalse(intakeSubsystem.stop());
     // Intake deploy/retract
     operatorController.y() // retract
-          .onTrue(intakeSubsystem.runDeploy(-0.32))
+          .onTrue(intakeSubsystem.runDeploy(-.5))
           .onFalse(intakeSubsystem.stopDeploy());
 
     operatorController.a() // deploy
@@ -197,13 +197,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //return autoChooser.getSelected();
     return autoChooser.getSelected();
   }
 
   public void runRobotPeriodic() {
     shooterPeriodic();
-
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
@@ -216,6 +214,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Right Shooter Speed", shooter.getSpeedRight().getValueAsDouble());
   }
 
+ 
   
 
   private void intakeDeployerPeriodic() {
