@@ -153,7 +153,7 @@ public class RobotContainer {
              .onFalse(agitator.stop().alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shootWithPID(2750,2500)
+      .onTrue(shooter.shootWithPID(2950,2900)
         .alongWith(shooterFeeder.feed())
        )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
