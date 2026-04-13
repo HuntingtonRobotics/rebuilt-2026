@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
-
+import frc.robot.util.LimelightAimer;
 
 public class Swerve extends SubsystemBase{
     private double MaxSpeed = Constants.SwerveConstants.MaxSpeed;
@@ -28,6 +28,7 @@ public class Swerve extends SubsystemBase{
     private final Telemetry logger = new Telemetry(MaxSpeed);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    private final LimelightAimer aimer = new LimelightAimer();
     // -------------------------------------------------------
     // Limelight Aim
     // -------------------------------------------------------
@@ -63,27 +64,32 @@ public class Swerve extends SubsystemBase{
         );
     }   
 
-    public void configureBindings(CommandXboxController controller) {
+    public void configureBindings(CommandXboxController controller, CommandXboxController operatorController) {
         // Default drive command — full manual control
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-controller.getLeftY() * MaxSpeed)
                     .withVelocityY(-controller.getLeftX() * MaxSpeed)
-                    .withRotationalRate(-controller.getRightX() * MaxAngularRate)
+                    .withRotationalRate(
+                        operatorController.rightBumper().getAsBoolean()
+                            ? aimer.getRotation(controller.getRightX()) * MaxAngularRate
+                            : -controller.getRightX() * MaxAngularRate
+                    )
             )
         );
 
+
         // Right bumper: vision-assisted rotation using angular PID
-        controller.rightBumper().whileTrue(
-            Commands.run(() -> drivetrain.resetAngularPID())
-            .andThen(
-                drivetrain.applyRequest(() ->
-                    drive.withVelocityX(-controller.getLeftY() * MaxSpeed)
-                        .withVelocityY(-controller.getLeftX() * MaxSpeed)
-                        .withRotationalRate(drivetrain.getAngularPID() * MaxAngularRate)
-                )
-            )
-        );
+        // controller.rightBumper().whileTrue(
+        //     Commands.run(() -> drivetrain.resetAngularPID())
+        //     .andThen(
+        //         drivetrain.applyRequest(() ->
+        //             drive.withVelocityX(-controller.getLeftY() * MaxSpeed)
+        //                 .withVelocityY(-controller.getLeftX() * MaxSpeed)
+        //                 .withRotationalRate(drivetrain.getAngularPID() * MaxAngularRate)
+        //         )
+        //     )
+        // );
 
         // Y button: limelight tag tracking
         // Left stick still controls forward/backward and strafe
@@ -107,9 +113,6 @@ public class Swerve extends SubsystemBase{
         );
 
         controller.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        controller.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-controller.getLeftY(), -controller.getLeftX()))
-        ));
 
         controller.back().and(controller.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         controller.back().and(controller.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));

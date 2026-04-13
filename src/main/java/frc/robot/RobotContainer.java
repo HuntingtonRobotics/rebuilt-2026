@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,7 +46,7 @@ public class RobotContainer {
   private final CommandXboxController driverController =
   
     new CommandXboxController(OperatorConstants.DriverControllerPort);
-  private final CommandXboxController operatorController =
+  private static final CommandXboxController operatorController =
     new CommandXboxController(OperatorConstants.OperatorControllerPort);
 
   /* Path follower */
@@ -54,6 +55,9 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+  public static CommandXboxController getOperatorController() {
+    return operatorController;
+  }
   public RobotContainer() {
     registerDashboardProperties();
 
@@ -67,14 +71,18 @@ public class RobotContainer {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shoot", shooter.shoot(1.13).andThen(Commands.waitSeconds(0.2)));
+    NamedCommands.registerCommand("shoot", shooter.shootWithPID());
     NamedCommands.registerCommand("shootStop", shooter.stop());
-    NamedCommands.registerCommand("stopIntake", intakeSubsystem.stopDeploy());
-    NamedCommands.registerCommand("deployIntake", Commands.race(intakeSubsystem.runDeploy(.32), Commands.waitSeconds(1.5)));
-    NamedCommands.registerCommand("retractIntake", intakeSubsystem.retract());
+    NamedCommands.registerCommand("stopIntakeDeploy", intakeSubsystem.stopDeploy());
+    NamedCommands.registerCommand("stopIntake", intakeSubsystem.stop());
+    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(0.32));
+    NamedCommands.registerCommand("retractIntake", intakeSubsystem.runDeploy(-0.32));
     NamedCommands.registerCommand("runIntake", intakeSubsystem.spin());
-    NamedCommands.registerCommand("agitate", agitator.agitate());
+    NamedCommands.registerCommand("agitate", agitator.shakeIt());
     NamedCommands.registerCommand("feed", shooterFeeder.feed());
+    NamedCommands.registerCommand("shooterFeedStop", shooterFeeder.stop());
+    NamedCommands.registerCommand("agitateStop", agitator.stop());
+
 
     // Add more commands here as needed
   }
@@ -94,7 +102,7 @@ public class RobotContainer {
   }
 
   private void configureDriveBindings() {
-    swerveDrivetrain.configureBindings(driverController);
+    swerveDrivetrain.configureBindings(driverController, operatorController);
   }
   private void configureGameplayBindings() {
     //TODO - refactor into methods
@@ -124,25 +132,25 @@ public class RobotContainer {
       .onFalse(shooter.stop());
     */
     // Feeder (variable speed with Left Stick Y-Axis)
-    shooterFeeder.setDefaultCommand(
-      Commands.run(() -> {
-        double speed = -operatorController.getLeftY();
-        double deadband = 0.05;
-        if (Math.abs(speed) < deadband) {
-            speed = 0;
-        }
-        shooterFeeder.feed();
-      }, shooterFeeder)
-    );
+//     shooterFeeder.setDefaultCommand(
+//       Commands.run(() -> {
+//         double speed = -operatorController.getLeftY();
+//         double deadband = 0.05;
+//         if (Math.abs(speed) < deadband) {
+//             speed = 0;
+//         }
+//         shooterFeeder.feed();
+//       }, shooterFeeder)
+//     );
 
-    // Shooter (variable speed with Right Stick Y-Axis)
-    shooter.setDefaultCommand(
-    Commands.run(() -> {
-        double speed = -operatorController.getRightY();
-        if (Math.abs(speed) < 0.05) speed = 0;
-        shooter.setSpeed(speed);
-    }, shooter)
-);
+//     // Shooter (variable speed with Right Stick Y-Axis)
+//     shooter.setDefaultCommand(
+//     Commands.run(() -> {
+//         double speed = -operatorController.getRightY();
+//         if (Math.abs(speed) < 0.05) speed = 0;
+//         shooter.setSpeed(speed);
+//     }, shooter)
+// );
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
@@ -153,7 +161,7 @@ public class RobotContainer {
              .onFalse(agitator.stop().alongWith(intakeSubsystem.stop()));
 
     operatorController.rightBumper()
-      .onTrue(shooter.shootWithPID(2950,2900)
+      .onTrue(shooter.shootWithPID()
         .alongWith(shooterFeeder.feed())
        )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
@@ -187,7 +195,7 @@ public class RobotContainer {
       .onTrue(intakeSubsystem.runDeploy(0.32))
       .onFalse(intakeSubsystem.stopDeploy());
 
-    operatorController.b().whileTrue(new April(swerveDrivetrain));
+    //operatorController.b().whileTrue();
 
     }
  
