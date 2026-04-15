@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -84,6 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("feed", shooterFeeder.feed());
     NamedCommands.registerCommand("shooterFeedStop", shooterFeeder.stop());
     NamedCommands.registerCommand("agitateStop", agitator.stop());
+    NamedCommands.registerCommand("brake", swerveDrivetrain.drivetrain.applyRequest(() -> new SwerveRequest.SwerveDriveBrake()));
 
 
     // Add more commands here as needed
