@@ -23,42 +23,22 @@ import frc.robot.Robot;
  * same physical device, so two separate code methods (one per motor) is perhaps less overhead than two separate classes. </p>
     
 */
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystemCollector extends SubsystemBase {
     
     private static final String IntakeDeployerTargetPosDashboardKey = "Intake Deployer Target Position";
     public static final String IntakeDeployerCurrentPosDashboardKey = "Intake Deployer Current Position";
     public static final String ResetEncoderDashboardKey = "Reset Intake Deployer Encoder";
 
     // Collector motor (rollers)
+    private SparkMax collectorMotor;
 
     // Deployer motor with closed-loop control
     //  there are two physical motors on robot but only one needs to be configured here; the other is set to follow
-    private SparkMax deployMotor;
-    private SparkMaxConfig motorConfig;
-    private SparkClosedLoopController closedLoopController;
-    private RelativeEncoder encoder;
-    private double intakePos;
-    private boolean isDeployed = false;
 
-    public IntakeSubsystem() {
+    public IntakeSubsystemCollector() {
         if (!Robot.isSimulation()) {}
-        deployMotor = new SparkMax(54, MotorType.kBrushless);
-        closedLoopController = deployMotor.getClosedLoopController();
-        encoder = deployMotor.getEncoder();
-        motorConfig = new SparkMaxConfig();
-
-        motorConfig.encoder
-            .positionConversionFactor(1);
-        motorConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            // Set PID values for position control. We don't need to pass a closed loop
-            // slot, as it will default to slot 0.
-            .p(0.08)
-            .i(0)
-            .d(0)
-            .outputRange(-1, 1);
-        deployMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
+        collectorMotor = new SparkMax(52, MotorType.kBrushless);
+        
         SmartDashboard.setDefaultNumber(IntakeDeployerTargetPosDashboardKey, 0);
         SmartDashboard.setDefaultBoolean(ResetEncoderDashboardKey, false);
     }
@@ -71,12 +51,17 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param speed The speed to spin the motor at, between -1 and 1.
      * @return A command that spins the motor at the given speed.
      */
-
+    public Command spin() {
+        return this.runOnce(() -> collectorMotor.set(-1));
+    }
     /**
      * Stop the collector motor.
      *
      * @return A command that stops the collector.
      */
+    public Command stop() {
+        return this.run(() -> collectorMotor.set(0));
+    }
 
     /**
      * Run the collector at a fixed intake speed until ended.
@@ -84,30 +69,15 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return A command that starts the collector and stops it when finished.
      */
     
-
-
-    public Command moveToStart() {
-        return this.runOnce(() -> closedLoopController.setSetpoint(1.547, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+    public Command run() {
+        return this.run(
+          () -> collectorMotor.set(-1)
+        );
     }
+
 
     // ------------------- Deploy (rotate in/out) methods -------------------
     // These two methods are the same but with different Dashboard defaults
-    public Command deploy() {
-        isDeployed = true;
-        double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(1.00, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-    }
-
-    public Command retract() {
-        isDeployed = false;
-        double targetPosition = SmartDashboard.getNumber(IntakeDeployerTargetPosDashboardKey, 0);
-        return this.runOnce(() -> closedLoopController.setSetpoint(-16.45, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-    }
-    
-    public Command stopDeploy() {
-        return this.runOnce(() -> deployMotor.set(0));
-    }
-
    // public Command flexIntake() {
      //   if(encoder.getPosition() > 6){
        //     return Commands.sequence(retract(),new WaitCommand(7),
@@ -120,16 +90,4 @@ public class IntakeSubsystem extends SubsystemBase {
     /**
      * Deploy or retract at a given speed
      */
-    public Command runDeploy(double speed) {
-        return this.runOnce(() -> deployMotor.set(speed));
-    }
-
-    public void resetEncoder() {
-        encoder.setPosition(0);
-    }
-
-    public double getPosition() {
-        return encoder.getPosition();
-    }
-
 }

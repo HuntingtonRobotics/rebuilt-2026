@@ -18,6 +18,7 @@ import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.April;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystemCollector;
 import frc.robot.subsystems.Swerve;
 //import frc.robot.subsystems.Intake.IntakeCollector;
 //import frc.robot.subsystems.Intake.IntakeDeploy;
@@ -41,6 +42,7 @@ public class RobotContainer {
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
+  private final IntakeSubsystemCollector intakeCollector = new IntakeSubsystemCollector();
 
   // Commands
   private final CommandXboxController driverController =
@@ -74,11 +76,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("shoot", shooter.shootWithPID());
     NamedCommands.registerCommand("shootStop", shooter.stop());
     NamedCommands.registerCommand("stopIntakeDeploy", intakeSubsystem.stopDeploy());
-    NamedCommands.registerCommand("stopIntake", intakeSubsystem.stop());
-    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(0.32));
-    NamedCommands.registerCommand("retractIntake", intakeSubsystem.runDeploy(-0.32));
-    NamedCommands.registerCommand("runIntake", intakeSubsystem.spin());
-    NamedCommands.registerCommand("agitate", agitator.shakeIt());
+    NamedCommands.registerCommand("stopIntake", intakeCollector.stop());
+    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(-1));
+    NamedCommands.registerCommand("retractIntake", intakeSubsystem.runDeploy(1));
+    NamedCommands.registerCommand("runIntake", intakeCollector.run());
+    NamedCommands.registerCommand("agitate", agitator.run());
     NamedCommands.registerCommand("feed", shooterFeeder.feed());
     NamedCommands.registerCommand("shooterFeedStop", shooterFeeder.stop());
     NamedCommands.registerCommand("agitateStop", agitator.stop());
@@ -119,7 +121,7 @@ public class RobotContainer {
           if (Math.abs(speed) < deadband) {
               speed = 0;
           }
-          intakeSubsystem.spin();
+          intakeCollector.spin();
         },
         intakeSubsystem
       )
@@ -154,11 +156,11 @@ public class RobotContainer {
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(intakeSubsystem.spin()
+         .onTrue(intakeCollector.spin()
              .alongWith(agitator.shakeIt())
          
              )
-             .onFalse(agitator.stop().alongWith(intakeSubsystem.stop()));
+             .onFalse(agitator.stop().alongWith(intakeCollector.stop()));
 
     operatorController.rightBumper()
       .onTrue(shooter.shootWithPID()
@@ -184,15 +186,15 @@ public class RobotContainer {
      
      
       operatorController.x()
-     .onTrue(intakeSubsystem.spin())
-     .onFalse(intakeSubsystem.stop());
+     .onTrue(intakeCollector.spin())
+     .onFalse(intakeCollector.stop());
     // Intake deploy/retract
     operatorController.y() // retract
-          .onTrue(intakeSubsystem.runDeploy(-.5))
+          .onTrue(intakeSubsystem.runDeploy(.5))
           .onFalse(intakeSubsystem.stopDeploy());
 
     operatorController.a() // deploy
-      .onTrue(intakeSubsystem.runDeploy(0.32))
+      .onTrue(intakeSubsystem.runDeploy(-0.32))
       .onFalse(intakeSubsystem.stopDeploy());
 
     //operatorController.b().whileTrue();
@@ -241,4 +243,5 @@ public class RobotContainer {
   private void agitatorPeriodic() {
     SmartDashboard.putNumber("Agitator Speed", agitator.getSpeed());
   }
+  
 }
