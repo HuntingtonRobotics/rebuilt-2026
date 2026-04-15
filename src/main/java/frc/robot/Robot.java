@@ -121,7 +121,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if (shooter.getRPMError() < 150 && aimer.ValidTarget()) {
+      BlueAndWhiteLED();
+    } else if(aimer.getDistance(0) > 5.5 && aimer.getDistance(0) < 9.5) {
+      GreenLED();
+    } else if (aimer.ValidTarget()) {
+      BlueLED();
+    } else {
+      RedLED();
+    }
+  }
 
   @Override
   public void teleopInit() {
