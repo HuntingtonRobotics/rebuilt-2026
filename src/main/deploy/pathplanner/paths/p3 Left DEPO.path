@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.023113636363636,
+        "y": 5.5
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.6470692465913293,
+        "y": 5.5176707518924095
+      },
+      "isLocked": false,
+      "linkedName": "Left p2-3"
+    },
+    {
+      "anchor": {
+        "x": 3.101,
+        "y": 5.559
+      },
+      "prevControl": {
+        "x": 4.5675425837640224,
+        "y": 5.544653946212285
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "shoot to depo"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 135.0
+  },
+  "reversed": false,
+  "folder": "Final Paths (Left Neutral Depo Route)",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 135.0
+  },
+  "useDefaultConstraints": true
+}

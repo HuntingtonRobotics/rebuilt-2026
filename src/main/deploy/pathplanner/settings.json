@@ -4,10 +4,16 @@
   "holonomicMode": true,
   "pathFolders": [
     "Farther auto",
-    "farther auto flip"
+    "Final Paths (Left Neutral Route)",
+    "Final Paths (Right Neutral Route)",
+    "Final Paths (Left Neutral Depo Route)",
+    "farther auto flip",
+    "right route dylan"
   ],
-  "autoFolders": [],
-  "defaultMaxVel": 3.0,
+  "autoFolders": [
+    "Comp Autos"
+  ],
+  "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
