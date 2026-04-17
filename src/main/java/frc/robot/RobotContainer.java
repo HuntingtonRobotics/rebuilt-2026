@@ -78,14 +78,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("shootStop", shooter.stop());
     NamedCommands.registerCommand("stopIntakeDeploy", intakeSubsystem.stopDeploy());
     NamedCommands.registerCommand("stopIntake", intakeCollector.stop());
-    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(-1));
-    NamedCommands.registerCommand("retractIntake", intakeSubsystem.runDeploy(1));
+    NamedCommands.registerCommand("deployIntake", intakeSubsystem.runDeploy(-0.5));
+    NamedCommands.registerCommand("retractIntake", intakeSubsystem.runDeploy(0.5));
     NamedCommands.registerCommand("runIntake", intakeCollector.run());
-    NamedCommands.registerCommand("agitate", agitator.run());
+    NamedCommands.registerCommand("agitate", agitator.autoRun());
     NamedCommands.registerCommand("feed", shooterFeeder.feed());
     NamedCommands.registerCommand("shooterFeedStop", shooterFeeder.stop());
     NamedCommands.registerCommand("agitateStop", agitator.stop());
     NamedCommands.registerCommand("brake", swerveDrivetrain.drivetrain.applyRequest(() -> new SwerveRequest.SwerveDriveBrake()));
+    NamedCommands.registerCommand("homeIn", swerveDrivetrain.homeIn());
+
 
 
     // Add more commands here as needed
@@ -158,37 +160,39 @@ public class RobotContainer {
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(intakeCollector.spin()
+         .onTrue(shooterFeeder.feed()
              .alongWith(agitator.shakeIt())
          
              )
-             .onFalse(agitator.stop().alongWith(intakeCollector.stop()));
+             .onFalse(agitator.stop().alongWith(shooterFeeder.stop()));
 
     operatorController.rightBumper()
       .onTrue(shooter.shootWithPID()
-        .alongWith(shooterFeeder.feed())
+      .alongWith(shooterFeeder.feed())
        )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
       operatorController.leftTrigger()
-        .onTrue(shooter.shoot(-10)
+        .onTrue(shooter.shoot(-shooter.rpmFromDistance(20))
         .alongWith(shooterFeeder.feed())
-        
       )
-        //30000 LT Passing
+        //4300 LT Passing
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
         operatorController.rightTrigger()
-        .onTrue(shooter.shoot(-1.13)
+        .onTrue(shooter.shoot(-shooter.rpmFromDistance(5.5))
         .alongWith(shooterFeeder.feed())
       )
-        //3400 (Trench) RT 
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
      
      
      
-      operatorController.x()
+    operatorController.x()
      .onTrue(intakeCollector.spin())
+     .onFalse(intakeCollector.stop());
+
+    operatorController.b()
+     .onTrue(intakeCollector.reverseSpin())
      .onFalse(intakeCollector.stop());
     // Intake deploy/retract
     operatorController.y() // retract
