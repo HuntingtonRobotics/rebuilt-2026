@@ -42,10 +42,9 @@ public class FlywheelShooter extends SubsystemBase {
     private final LimelightAimer aimer = new LimelightAimer();
     private double distance = aimer.getDistance(0);
 
-
     public FlywheelShooter() {
 
-
+        //Benmakebadautos
         // https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
         TalonFXConfiguration config = new TalonFXConfiguration();
         /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
@@ -62,6 +61,7 @@ public class FlywheelShooter extends SubsystemBase {
         /* Retry config apply up to 5 times, report if failure */
         applyConfig(krakenMotorTop, config);
         applyConfig(krakenMotorBottom, config);
+
     }
 
 
@@ -74,8 +74,8 @@ public class FlywheelShooter extends SubsystemBase {
 
     public Command shoot(double speed) {
         return this.runOnce(() -> {
-            krakenMotorTop.setControl(velocityVoltage.withVelocity(speed * 50)); //black wheels
-            krakenMotorBottom.setControl(velocityVoltage.withVelocity(speed * -50)); //blue wheels
+            krakenMotorTop.setControl(velocityVoltage.withVelocity(speed/60)); //black wheels
+            krakenMotorBottom.setControl(velocityVoltage.withVelocity(speed / -60)); //blue wheels
         });
     }
 
@@ -133,7 +133,7 @@ public class FlywheelShooter extends SubsystemBase {
     public double rpmFromDistance(double distance) {
         double a = 2.29961;
         double b = 52.26073;
-        double c = 2935.09104;
+        double c = 2875.09104;
         return a * Math.pow(distance, 2) + b * distance + c; // equation that ben and dylan came up with to convert distance to rpm
     }
     public double getRPMError() {

@@ -4,9 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "Farther auto",
-    "Final Paths (Left Neutral Route)",
-    "Final Paths (Right Neutral Route)",
     "Final Paths (Left Neutral Depo Route)",
+    "Final Paths (Left Neutral Route)",
+    "Final Paths (Left1 Neutral Route)",
+    "Final Paths (Right Neutral Route)",
+    "New Folder",
     "farther auto flip",
     "right route dylan"
   ],

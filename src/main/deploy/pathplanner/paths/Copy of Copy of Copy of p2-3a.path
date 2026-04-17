@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.445215909090908,
-        "y": 7.179
+        "x": 8.445,
+        "y": 1.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.04661708279344,
-        "y": 5.996350714160888
+        "x": 7.737893218813452,
+        "y": 1.707106781186548
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right 1-2"
     },
     {
       "anchor": {
         "x": 7.548522727272726,
-        "y": 4.643102272727273
+        "y": 3.357
       },
       "prevControl": {
-        "x": 8.380062456848467,
-        "y": 4.810166155756339
+        "x": 8.380062476950494,
+        "y": 3.189936217026307
       },
       "nextControl": {
-        "x": 6.561940135582556,
-        "y": 4.444888870728148
+        "x": 6.561940111732451,
+        "y": 3.555213283288153
       },
       "isLocked": false,
       "linkedName": null
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 6.023113636363636,
-        "y": 5.5
+        "y": 2.6
       },
       "prevControl": {
-        "x": 6.518872805552797,
-        "y": 5.5
+        "x": 7.523113636363636,
+        "y": 2.6
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,24 +47,10 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": -119.99999999999999
+      "rotationDegrees": 119.99999999999999
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 1.8,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -77,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 135.0
+    "rotation": -135.0
   },
   "reversed": false,
-  "folder": "Final Paths (Left Neutral Route)",
+  "folder": "Final Paths (Left1 Neutral Route)",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -90.0
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

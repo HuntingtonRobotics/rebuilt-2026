@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4152499999999995,
-        "y": 0.45
+        "x": 3.6,
+        "y": 7.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.300038108015556,
-        "y": 0.6466226956454129
+        "x": 2.926040799287811,
+        "y": 7.010595052828445
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.445,
-        "y": 1.0
+        "x": 1.25,
+        "y": 6.0
       },
       "prevControl": {
-        "x": 9.272736005473503,
-        "y": 0.17226399452649765
+        "x": 3.320800238128892,
+        "y": 6.581657902443237
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right 1-2"
+      "linkedName": "first endpoint"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,14 +41,14 @@
     "unlimited": true
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Final Paths (Right Neutral Route)",
+  "folder": "Final Paths (Left Neutral Depo Route)",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

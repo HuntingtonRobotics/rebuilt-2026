@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "deployIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntakeDeploy"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Back Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "agitate"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterFeedStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "agitateStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootStop"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Comp Autos",
+  "choreoAuto": false
+}

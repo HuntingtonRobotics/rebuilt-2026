@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of p1"
+                  "pathName": "Center to Depot"
                 }
               },
               {
@@ -33,7 +33,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.75
                       }
                     },
                     {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of p2-3a"
+                  "pathName": "p2 Left depot"
                 }
               },
               {
@@ -69,15 +69,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "runIntake"
-                      }
-                    },
-                    {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 1.0
                       }
                     },
                     {
@@ -93,28 +87,27 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of p2-3b"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "name": "homeIn"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "brake"
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -124,15 +117,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "feed"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterFeedStop"
           }
         },
         {
@@ -144,70 +149,73 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of p3-3a"
+            "pathName": "p3 Left depot"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of p3-3b"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "runIntake"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.5
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "stopIntake"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of p3-3c"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "pathName": "p4 Left depot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "brake"
+            "name": "runIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "p5 Left depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "p6 Left depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "p7 Left depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "p8 Left depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "homeIn"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -217,15 +225,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "feed"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterFeedStop"
           }
         },
         {

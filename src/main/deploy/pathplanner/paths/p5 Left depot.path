@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4152499999999995,
-        "y": 0.45
+        "x": 5.75,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.300038108015556,
-        "y": 0.6466226956454129
+        "x": 6.232962913144534,
+        "y": 7.62940952255126
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left p4-5"
     },
     {
       "anchor": {
-        "x": 8.445,
-        "y": 1.0
+        "x": 5.75,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 9.272736005473503,
-        "y": 0.17226399452649765
+        "x": 5.75,
+        "y": 4.25
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right 1-2"
+      "linkedName": "Left p5-6"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [],
@@ -43,17 +43,17 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Final Paths (Right Neutral Route)",
+  "folder": "Final Paths (Left Neutral Depo Route)",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 90.0
+    "velocity": 2.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

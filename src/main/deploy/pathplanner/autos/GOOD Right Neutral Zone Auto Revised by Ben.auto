@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "p1 Left"
+                  "pathName": "Copy of p1"
                 }
               },
               {
@@ -33,19 +33,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.75
                       }
                     },
                     {
                       "type": "named",
                       "data": {
                         "name": "stopIntakeDeploy"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "runIntake"
                       }
                     }
                   ]
@@ -61,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "p2 Left"
+                  "pathName": "Copy of p2-3a"
                 }
               },
               {
@@ -93,15 +87,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "p3 Left DEPO"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of p2-3b"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "brake"
+            "pathName": "Stall Before Shoot"
           }
         },
         {
@@ -113,7 +114,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -123,15 +124,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "feed"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterFeedStop"
           }
         },
         {
@@ -141,33 +154,66 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "runIntake"
+            "pathName": "Copy of p3-3a"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of p3-3b"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "runIntake"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stopIntake"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of p3-3c"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "p4 Left DEPO"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "p5 Left DEPO"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "brake"
+            "pathName": "Stall Before Shoot"
           }
         },
         {
@@ -179,7 +225,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -189,15 +235,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "feed"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooterFeedStop"
           }
         },
         {

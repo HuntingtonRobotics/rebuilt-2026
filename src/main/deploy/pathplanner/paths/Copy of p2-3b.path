@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.650606373957145,
-        "y": 2.5117993942857697
+        "x": 3.6929567989383885,
+        "y": 2.5914485148360558
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 2.501
+        "x": 1.0,
+        "y": 2.6
       },
       "prevControl": {
-        "x": 3.4643429700042327,
-        "y": 2.5196792020117247
+        "x": 2.5341259003742804,
+        "y": 2.590813573086202
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "right Shoot"
     }
   ],
   "rotationTargets": [],
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 4.0,
     "rotation": -135.0
   },
   "reversed": false,
   "folder": "Final Paths (Right Neutral Route)",
   "idealStartingState": {
-    "velocity": 2.0,
+    "velocity": 4.0,
     "rotation": -135.0
   },
   "useDefaultConstraints": true

@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if (shooter.getRPMError() < 150 && aimer.ValidTarget()) {
       BlueAndWhiteLED();
-    } else if(aimer.getDistance(0) > 5.5 && aimer.getDistance(0) < 9.5) {
+    } else if(aimer.getDistance(0) > 5.5 && aimer.getDistance(0) < 8.5) {
       GreenLED();
     } else if (aimer.ValidTarget()) {
       BlueLED();

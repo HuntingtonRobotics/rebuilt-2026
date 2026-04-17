@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.023113636363636,
-        "y": 5.5
+        "x": 1.0,
+        "y": 2.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6470692465913293,
-        "y": 5.5176707518924095
+        "x": 1.25,
+        "y": 2.6
       },
       "isLocked": false,
-      "linkedName": "Left p2-3"
+      "linkedName": "right Shoot"
     },
     {
       "anchor": {
-        "x": 3.101,
-        "y": 5.559
+        "x": 6.023,
+        "y": 2.6
       },
       "prevControl": {
-        "x": 4.5675425837640224,
-        "y": 5.544653946212285
+        "x": 5.708877428098997,
+        "y": 2.6
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot to depo"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9,
+      "rotationDegrees": -135.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 135.0
+    "velocity": 4.0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Final Paths (Left Neutral Depo Route)",
+  "folder": "Final Paths (Left1 Neutral Route)",
   "idealStartingState": {
-    "velocity": 1.0,
-    "rotation": 135.0
+    "velocity": 4.0,
+    "rotation": -135.0
   },
   "useDefaultConstraints": true
 }

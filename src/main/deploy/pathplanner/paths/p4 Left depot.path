@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.9
+        "x": 4.0,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2752700066358287,
-        "y": 5.821315570149035
+        "x": 4.758141292706647,
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": "Left p4-5"
+      "linkedName": "shoot to depo"
     },
     {
       "anchor": {
-        "x": 3.101,
-        "y": 5.559
+        "x": 5.74,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 2.047009243238537,
-        "y": 5.816294976423176
+        "x": 4.906990303259376,
+        "y": 7.7232042755289445
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left p3-4"
+      "linkedName": "Left p4-5"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 135.0
+    "velocity": 2.0,
+    "rotation": -0.0
   },
   "reversed": false,
   "folder": "Final Paths (Left Neutral Depo Route)",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 2.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

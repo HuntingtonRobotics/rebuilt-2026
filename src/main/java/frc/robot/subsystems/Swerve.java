@@ -221,4 +221,10 @@ public class Swerve extends SubsystemBase{
             drivetrain.applyRequest(() -> idle)
         );
     }
+
+    public Command homeIn(){
+        return drivetrain.runOnce(() ->
+            drive.withRotationalRate(aimer.getRotation(0) * MaxAngularRate)
+        );
+    }
 }

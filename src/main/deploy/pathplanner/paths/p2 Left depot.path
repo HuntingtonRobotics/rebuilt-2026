@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4152499999999995,
-        "y": 7.55
+        "x": 1.25,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.300038108015556,
-        "y": 7.353377304354587
+        "x": 1.5912461318734277,
+        "y": 5.9172447223042255
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "first endpoint"
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 7.0
+        "x": 3.0,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 7.172263994526498,
-        "y": 7.827736005473502
+        "x": 1.9203960085551195,
+        "y": 5.963938535008649
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "first endpoint"
+      "linkedName": "Left p2-3"
     }
   ],
   "rotationTargets": [],
@@ -38,17 +38,17 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": -90.0
+    "velocity": 0.0,
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": "Final Paths (Left Neutral Depo Route)",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

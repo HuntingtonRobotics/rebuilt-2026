@@ -24,6 +24,14 @@ public class Agitator extends SubsystemBase {
     );
   }
 
+  public Command autoRun() {
+    return this.runOnce(
+      () -> {
+        motorRight.set(-.85);
+      }
+    );
+  }
+
   public Command run() {
     return this.run(
       () -> {

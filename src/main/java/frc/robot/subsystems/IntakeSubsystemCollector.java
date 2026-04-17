@@ -31,13 +31,13 @@ public class IntakeSubsystemCollector extends SubsystemBase {
 
     // Collector motor (rollers)
     private SparkMax collectorMotor;
-
     // Deployer motor with closed-loop control
     //  there are two physical motors on robot but only one needs to be configured here; the other is set to follow
 
     public IntakeSubsystemCollector() {
         if (!Robot.isSimulation()) {}
         collectorMotor = new SparkMax(52, MotorType.kBrushless);
+        
         
         SmartDashboard.setDefaultNumber(IntakeDeployerTargetPosDashboardKey, 0);
         SmartDashboard.setDefaultBoolean(ResetEncoderDashboardKey, false);
@@ -52,15 +52,20 @@ public class IntakeSubsystemCollector extends SubsystemBase {
      * @return A command that spins the motor at the given speed.
      */
     public Command spin() {
-        return this.runOnce(() -> collectorMotor.set(-1));
+      return this.runOnce(() -> collectorMotor.set(-0.8));
     }
+
+    public Command reverseSpin() {
+      return this.runOnce(() -> collectorMotor.set(0.1));
+    }
+
     /**
      * Stop the collector motor.
      *
      * @return A command that stops the collector.
      */
     public Command stop() {
-        return this.run(() -> collectorMotor.set(0));
+        return this.runOnce(() -> collectorMotor.set(0));
     }
 
     /**
@@ -70,9 +75,9 @@ public class IntakeSubsystemCollector extends SubsystemBase {
      */
     
     public Command run() {
-        return this.run(
-          () -> collectorMotor.set(-1)
-        );
+      return this.runOnce(
+        () -> collectorMotor.set(-1)
+      );
     }
 
 
