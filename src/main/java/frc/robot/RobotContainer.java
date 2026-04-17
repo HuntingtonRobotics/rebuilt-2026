@@ -160,11 +160,11 @@ public class RobotContainer {
 
     // Shooter Hood (one-touch to preset positions)
     operatorController.leftBumper()
-         .onTrue(shooterFeeder.feed()
-             .alongWith(agitator.shakeIt())
+         .onTrue(shooterFeeder.feed1()
+             .alongWith(agitator.run())
          
              )
-             .onFalse(agitator.stop().alongWith(shooterFeeder.stop()));
+             .onFalse(agitator.stop().alongWith(shooterFeeder.stop1()));
 
     operatorController.rightBumper()
       .onTrue(shooter.shootWithPID()
