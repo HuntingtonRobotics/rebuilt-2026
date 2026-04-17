@@ -167,7 +167,7 @@ public class RobotContainer {
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
         operatorController.rightTrigger()
-        .onTrue(shooter.shoot(-1.13)
+        .onTrue(shooter.shoot(-3232)
         .alongWith(shooterFeeder.feed())
       )
         //3400 (Trench) RT 
