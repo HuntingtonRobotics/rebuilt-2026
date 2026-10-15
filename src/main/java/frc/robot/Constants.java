@@ -33,9 +33,9 @@ public final class Constants {
     public static final int[] TARGET_TAG_IDS = {2,5,10,18,21,26};
 
     // Rotation PID - controls left/right alignment to center tag (tx = 0)
-    public static final double APRILTAG_ROTATION_KP = 0.02;
+    public static final double APRILTAG_ROTATION_KP = 0.0;
     public static final double APRILTAG_ROTATION_KI = 0.0;
-    public static final double APRILTAG_ROTATION_KD = 0.001;
+    public static final double APRILTAG_ROTATION_KD = 0.0;
     public static final double APRILTAG_ROTATION_DEADBAND = 2.0; // degrees
 
     // Drive PID - controls distance using target area

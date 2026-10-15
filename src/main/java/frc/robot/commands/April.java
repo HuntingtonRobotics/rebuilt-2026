@@ -42,9 +42,9 @@ public class April extends Command {
     m_drivePID.setSetpoint(frc.robot.Constants.VisionConstants.APRILTAG_TARGET_AREA);
     m_drivePID.setTolerance(frc.robot.Constants.VisionConstants.APRILTAG_AREA_TOLERANCE);
 
-    System.out.println("[AlignToAprilTag] Command created, targeting tags: 12, 15");
+    System.out.println("[AlignToAprilTag] Command created, targeting tags: 2,5,10,18,21,26");
     System.out.println("[AlignToAprilTag] Target area: " + frc.robot.Constants.VisionConstants.APRILTAG_TARGET_AREA + "%, tolerance: " + frc.robot.Constants.VisionConstants.APRILTAG_AREA_TOLERANCE + "%");
-    System.out.println("[AlignToAprilTag] Limelight IP: 10.80.92.200");
+    System.out.println("[AlignToAprilTag] Limelight IP: 10.50.16.200");
   }
 
   @Override

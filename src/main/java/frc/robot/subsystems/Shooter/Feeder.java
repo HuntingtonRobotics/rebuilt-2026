@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Feeder extends SubsystemBase {
 
   private final SparkMax feederMotor = new SparkMax(55, MotorType.kBrushless);
-  private final SparkMax feederMotor1 = new SparkMax(0, MotorType.kBrushless);
+  private final SparkMax feederMotor1 = new SparkMax(58, MotorType.kBrushless);
 
   // Positive = feed into shooter
   // Negative = outtake away from shooter (into hopper)
