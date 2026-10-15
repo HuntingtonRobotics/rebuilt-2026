@@ -22,7 +22,6 @@ import frc.robot.subsystems.Swerve;
 //import frc.robot.subsystems.Intake.IntakeDeploy;
 import frc.robot.subsystems.Shooter.Agitator;
 import frc.robot.subsystems.Shooter.Feeder;
-import frc.robot.subsystems.Shooter.FlywheelHood;
 import frc.robot.subsystems.Shooter.FlywheelShooter;
 
 /**
@@ -41,7 +40,6 @@ public class RobotContainer {
   private final Agitator agitator = new Agitator();
   private final Feeder shooterFeeder = new Feeder();
   private final FlywheelShooter shooter = new FlywheelShooter();
-  private final FlywheelHood shooterHood = new FlywheelHood();
 
   // Commands
   private final CommandXboxController driverController =
@@ -204,7 +202,6 @@ public class RobotContainer {
 
   public void runRobotPeriodic() {
     shooterPeriodic();
-    shooterHoodPeriodic();
     intakeDeployerPeriodic();
     feederPeriodic();
     agitatorPeriodic();
@@ -218,14 +215,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("Right Shooter Speed", shooter.getSpeedRight().getValueAsDouble());
   }
 
-  private void shooterHoodPeriodic() {
-    SmartDashboard.putNumber("Hood Position", shooterHood.getPosition());
-    if (SmartDashboard.getBoolean(FlywheelHood.ResetEncoderDashboardKey, false)) {
-      SmartDashboard.putBoolean(FlywheelHood.ResetEncoderDashboardKey, false);
-      // Reset the encoder position to 0
-      shooterHood.resetEncoder();
-    }
-  }
+ 
+  
 
   private void intakeDeployerPeriodic() {
     SmartDashboard.putNumber(IntakeSubsystem.IntakeDeployerCurrentPosDashboardKey, intakeSubsystem.getPosition());
