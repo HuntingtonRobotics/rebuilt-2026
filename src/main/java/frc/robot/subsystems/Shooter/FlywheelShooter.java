@@ -8,13 +8,9 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-<<<<<<< HEAD
-
-=======
 import frc.robot.pid;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
->>>>>>> AlbanyRobot
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -25,10 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.WaitForSpeedCommand;
-<<<<<<< HEAD
-=======
 import frc.robot.util.LimelightAimer;
->>>>>>> AlbanyRobot
 
 /** Subsystem for the flywheel shooter.
  * 
@@ -41,21 +34,12 @@ public class FlywheelShooter extends SubsystemBase {
     private static final double leftRpm = 2500;
     private static final double rightRotationsPerSecond = rightRpm/60;
     private static final double leftRotationsPerSecond = leftRpm/60;
-<<<<<<< HEAD
-    private static final double accelRPS = 30;
-    private final TalonFX krakenMotorLeft = new TalonFX(61);
-    private final TalonFX krakenMotorRight = new TalonFX(60);
-    private final SparkMax acceleratorMotor = new SparkMax(55, MotorType.kBrushless); //change channel
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-    private final NeutralOut brake = new NeutralOut();
-=======
     private final TalonFX krakenMotorTop = new TalonFX(61);
     private final TalonFX krakenMotorBottom = new TalonFX(60);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final NeutralOut brake = new NeutralOut();
     private final LimelightAimer aimer = new LimelightAimer();
     private double distance = aimer.getDistance(0);
->>>>>>> AlbanyRobot
 
     public FlywheelShooter() {
 
@@ -79,37 +63,6 @@ public class FlywheelShooter extends SubsystemBase {
 
     }
 
-<<<<<<< HEAD
-    public Command shoot() {
-        return new ParallelCommandGroup(
-            // setControl only needs to be called once to keep velocity
-            this.runOnce(() -> {
-                krakenMotorLeft.setControl(velocityVoltage.withVelocity(leftRotationsPerSecond));
-                krakenMotorRight.setControl(velocityVoltage.withVelocity(-rightRotationsPerSecond));
-                acceleratorMotor.set(accelRPS);
-            }),
-            new WaitForSpeedCommand(krakenMotorLeft, leftRotationsPerSecond, 0.1),
-            new WaitForSpeedCommand(krakenMotorRight, rightRotationsPerSecond, 0.1)
-        );
-    }
-
-    public Command shoot(double speed) {
-        return this.runOnce(() -> {
-            krakenMotorLeft.setControl(velocityVoltage.withVelocity(speed * 50));
-            krakenMotorRight.setControl(velocityVoltage.withVelocity(speed * -50));
-            acceleratorMotor.set(accelRPS);
-        });
-    }
-    
-    public Command stop() {
-        return this.runOnce(() -> {
-            krakenMotorLeft.setControl(brake);
-            krakenMotorRight.setControl(brake);
-            acceleratorMotor.stopMotor();
-        });
-    }
-
-=======
 
     public Command shoot() {
         return this.runOnce(() -> {
@@ -157,7 +110,6 @@ public class FlywheelShooter extends SubsystemBase {
         krakenMotorBottom.setControl(velocityVoltage.withVelocity(speed * -50));
     }
 
->>>>>>> AlbanyRobot
     public StatusSignal<AngularVelocity> getSpeedLeft() {
         return krakenMotorTop.getVelocity();
     }

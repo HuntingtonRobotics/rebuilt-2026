@@ -180,11 +180,7 @@ public class RobotContainer {
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
       
         operatorController.rightTrigger()
-<<<<<<< HEAD
-        .onTrue(shooter.shoot(-3232)
-=======
         .onTrue(shooter.shoot(-shooter.rpmFromDistance(5.5))
->>>>>>> AlbanyRobot
         .alongWith(shooterFeeder.feed())
       )
         .onFalse(shooter.stop().alongWith(shooterFeeder.stop()));
